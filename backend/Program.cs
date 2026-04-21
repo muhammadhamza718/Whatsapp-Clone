@@ -1,15 +1,53 @@
 using Microsoft.EntityFrameworkCore;
 using ChatApp.Api.Data;
+using Npgsql;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// 1. Get Connection String (Parse DATABASE_URL if present, otherwise use appsettings)
+var databaseUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
+string? connectionString;
+
+if (string.IsNullOrEmpty(databaseUrl))
+{
+    connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+}
+else
+{
+    // Parse postgres://user:pass@host:port/db
+    var databaseUri = new Uri(databaseUrl);
+    var userInfo = databaseUri.UserInfo.Split(':');
+    var npgsqlBuilder = new NpgsqlConnectionStringBuilder
+    {
+        Host = databaseUri.Host,
+        Port = databaseUri.Port,
+        Username = userInfo[0],
+        Password = userInfo.Length > 1 ? userInfo[1] : "",
+        Database = databaseUri.LocalPath.TrimStart('/'),
+        SslMode = SslMode.Require,
+        TrustServerCertificate = true // Often needed for Neon/Supabase
+    };
+    connectionString = npgsqlBuilder.ToString();
+}
+
 // Add services to the container.
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseNpgsql(connectionString));
 
 builder.Services.AddControllers();
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+
+// 2. Add CORS Policy
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowVercel", policy =>
+    {
+        policy.WithOrigins("https://whatsapp-clone-relay.vercel.app", "http://localhost:3000")
+              .AllowAnyHeader()
+              .AllowAnyMethod()
+              .AllowCredentials();
+    });
+});
 
 var app = builder.Build();
 
@@ -19,10 +57,12 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
-app.UseHttpsRedirection();
+app.UseCors("AllowVercel");
 
 app.UseAuthorization();
 
 app.MapControllers();
 
-app.Run();
+// 3. Dynamic Port Selection
+var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
+app.Run($"http://0.0.0.0:{port}");

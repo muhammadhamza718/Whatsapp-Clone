@@ -1,0 +1,11 @@
+**/.git
+**/.vscode
+**/bin
+**/obj
+**/node_modules
+frontend/
+.agents/
+.next/
+out/
+appsettings.Development.json
+*.db
