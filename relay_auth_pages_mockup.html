@@ -1,0 +1,188 @@
+
+<h2 class="sr-only">Relay auth pages — login and register mockup with light and dark mode</h2>
+<style>
+#ra{font-family:var(--font-sans);font-size:13px}
+#ra[data-theme="light"]{--bg:#F5F3EF;--surf:#FAFAF8;--card:#FFFFFF;--bd:rgba(0,0,0,0.09);--bd2:rgba(0,0,0,0.14);--tp:#2C2C2A;--ts:#888780;--ta:#0F6E56;--taa:#1D9E75;--btn:#0F6E56;--btnt:#FFFFFF;--inp:#F5F3EF;--inpf:#FFFFFF;--sub:#ECEAE5;--soc:#FAFAF8}
+#ra[data-theme="dark"]{--bg:#191B21;--surf:#1D2028;--card:#252830;--bd:rgba(255,255,255,0.07);--bd2:rgba(255,255,255,0.12);--tp:#E2E0DA;--ts:#888780;--ta:#1D9E75;--taa:#9FE1CB;--btn:#0F6E56;--btnt:#FFFFFF;--inp:#1A1E27;--inpf:#1D2028;--sub:#13151A;--soc:#1D2028}
+.fld{display:flex;flex-direction:column;gap:4px;margin-bottom:14px}
+.fld label{font-size:11.5px;font-weight:500;color:var(--ts)}
+.fld-inp{background:var(--inp);border:0.5px solid var(--bd2);border-radius:8px;padding:9px 12px;font-size:12.5px;color:var(--tp);display:flex;align-items:center;justify-content:space-between}
+.fld-inp.focus{border-color:var(--ta);background:var(--inpf)}
+.sbtn{width:100%;background:var(--btn);border:none;border-radius:9px;padding:10px;font-size:13px;font-weight:500;color:var(--btnt);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px}
+.soc-btn{flex:1;background:var(--soc);border:0.5px solid var(--bd2);border-radius:8px;padding:9px;display:flex;align-items:center;justify-content:center;gap:6px;cursor:pointer;font-size:11.5px;color:var(--tp)}
+.div{display:flex;align-items:center;gap:10px;margin:14px 0}
+.div span{font-size:11px;color:var(--ts);white-space:nowrap}
+.div-ln{flex:1;height:0.5px;background:var(--bd2)}
+.tab{flex:1;padding:8px;text-align:center;font-size:12.5px;cursor:pointer;border-bottom:2px solid transparent;color:var(--ts);font-weight:500}
+.tab.on{color:var(--ta);border-color:var(--ta)}
+.str{display:flex;gap:3px;margin-bottom:12px}
+.seg{height:3px;flex:1;border-radius:2px;background:var(--bd)}
+.seg.on{background:var(--ta)}
+.note{font-size:11px;color:var(--ts);text-align:center;line-height:1.6;margin-top:10px}
+.note a{color:var(--ta)}
+.badge{display:inline-flex;align-items:center;gap:5px;background:var(--sub);border:0.5px solid var(--bd2);border-radius:20px;padding:3px 10px;font-size:11px;color:var(--ts)}
+.badge span{width:6px;height:6px;border-radius:50%;background:var(--taa);flex-shrink:0}
+</style>
+
+<div id="ra" data-theme="light">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+    <span style="font-size:11px;color:var(--color-text-secondary)">auth pages — login & register</span>
+    <button onclick="var a=document.getElementById('ra'),b=document.getElementById('ra-tb');a.dataset.theme=a.dataset.theme==='light'?'dark':'light';b.textContent=a.dataset.theme==='dark'?'Light ☀':'Dark ☾'" id="ra-tb" style="font-size:11px;padding:4px 12px;border-radius:6px;cursor:pointer;border:0.5px solid var(--color-border-secondary);background:var(--color-background-secondary);color:var(--color-text-primary)">Dark ☾</button>
+  </div>
+
+  <!-- Two cards side by side -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+
+    <!-- LOGIN CARD -->
+    <div style="background:var(--surf);border-radius:14px;border:0.5px solid var(--bd);overflow:hidden">
+
+      <!-- Top bar -->
+      <div style="background:var(--sub);padding:14px 18px;border-bottom:0.5px solid var(--bd);display:flex;align-items:center;justify-content:space-between">
+        <span style="font-size:22px;font-weight:500;color:var(--ta);letter-spacing:-1.2px">relay</span>
+        <div class="badge"><span></span>Secure login</div>
+      </div>
+
+      <div style="padding:18px 20px">
+
+        <!-- Tabs -->
+        <div style="display:flex;border-bottom:0.5px solid var(--bd);margin-bottom:16px">
+          <div class="tab on">Login</div>
+          <div class="tab">Register</div>
+        </div>
+
+        <p style="font-size:13px;font-weight:500;color:var(--tp);margin:0 0 14px">Welcome back</p>
+
+        <!-- Social -->
+        <div style="display:flex;gap:8px;margin-bottom:4px">
+          <div class="soc-btn">
+            <svg width="14" height="14" viewBox="0 0 18 18" fill="none"><path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615Z" fill="#4285F4"/><path d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18Z" fill="#34A853"/><path d="M3.964 10.71c-.18-.54-.282-1.117-.282-1.71s.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332Z" fill="#FBBC05"/><path d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.958L3.964 6.29C4.672 4.163 6.656 3.58 9 3.58Z" fill="#EA4335"/></svg>
+            <span>Google</span>
+          </div>
+          <div class="soc-btn">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M8 .2A8 8 0 0 0 5.471 15.84c.4.073.546-.174.546-.385v-1.46c-2.22.482-2.69-.944-2.69-.944-.363-.924-.887-1.17-.887-1.17-.725-.495.055-.485.055-.485.802.056 1.224.823 1.224.823.713 1.22 1.87.868 2.327.664.072-.516.278-.868.507-1.068-1.773-.201-3.636-.886-3.636-3.944 0-.872.311-1.585.822-2.144-.083-.202-.357-1.014.077-2.114 0 0 .671-.215 2.2.82A7.653 7.653 0 0 1 8 3.97c.68.003 1.365.092 2.005.27 1.528-1.035 2.198-.82 2.198-.82.435 1.1.161 1.912.079 2.114.512.56.821 1.272.821 2.144 0 3.066-1.866 3.74-3.644 3.937.287.247.542.733.542 1.477v2.19c0 .213.144.462.55.384A8 8 0 0 0 8 .2Z" fill="var(--tp)"/></svg>
+            <span>GitHub</span>
+          </div>
+        </div>
+
+        <div class="div"><div class="div-ln"></div><span>or continue with email</span><div class="div-ln"></div></div>
+
+        <!-- Fields -->
+        <div class="fld">
+          <label>Email address</label>
+          <div class="fld-inp focus">
+            <span>hamza@example.com</span>
+            <svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M14 3H2a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1Z" stroke="var(--ta)" stroke-width="1.2"/><path d="M1 4l7 5 7-5" stroke="var(--ta)" stroke-width="1.2"/></svg>
+          </div>
+        </div>
+        <div class="fld">
+          <label style="display:flex;justify-content:space-between"><span>Password</span><a style="color:var(--ta);font-size:11px;cursor:pointer">Forgot password?</a></label>
+          <div class="fld-inp">
+            <span>••••••••••</span>
+            <svg width="13" height="13" viewBox="0 0 16 16" fill="none"><ellipse cx="8" cy="8.5" rx="6" ry="4" stroke="var(--ts)" stroke-width="1.2"/><circle cx="8" cy="8.5" r="1.5" stroke="var(--ts)" stroke-width="1.2"/></svg>
+          </div>
+        </div>
+
+        <!-- Remember me -->
+        <div style="display:flex;align-items:center;gap:7px;margin-bottom:16px">
+          <div style="width:14px;height:14px;border-radius:4px;background:var(--ta);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+            <svg width="9" height="9" viewBox="0 0 10 9" fill="none"><path d="M1.5 4.5L4 7l4.5-5" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <span style="font-size:11.5px;color:var(--ts)">Stay logged in on this device</span>
+        </div>
+
+        <button class="sbtn">
+          <span>Continue</span>
+          <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M7 3l5 4-5 4" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+
+        <div class="note">Don't have an account? <a>Create one →</a></div>
+      </div>
+    </div>
+
+    <!-- REGISTER CARD -->
+    <div style="background:var(--surf);border-radius:14px;border:0.5px solid var(--bd);overflow:hidden">
+
+      <div style="background:var(--sub);padding:14px 18px;border-bottom:0.5px solid var(--bd);display:flex;align-items:center;justify-content:space-between">
+        <span style="font-size:22px;font-weight:500;color:var(--ta);letter-spacing:-1.2px">relay</span>
+        <div class="badge"><span></span>Step 1 of 2</div>
+      </div>
+
+      <div style="padding:18px 20px">
+
+        <div style="display:flex;border-bottom:0.5px solid var(--bd);margin-bottom:16px">
+          <div class="tab">Login</div>
+          <div class="tab on">Register</div>
+        </div>
+
+        <!-- Progress bar -->
+        <div class="str">
+          <div class="seg on"></div>
+          <div class="seg on"></div>
+          <div class="seg"></div>
+          <div class="seg"></div>
+        </div>
+
+        <p style="font-size:13px;font-weight:500;color:var(--tp);margin:0 0 3px">Create your account</p>
+        <p style="font-size:11.5px;color:var(--ts);margin:0 0 14px">Your identity, secured by Better-Auth</p>
+
+        <!-- Social -->
+        <div style="display:flex;gap:8px;margin-bottom:4px">
+          <div class="soc-btn">
+            <svg width="14" height="14" viewBox="0 0 18 18" fill="none"><path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615Z" fill="#4285F4"/><path d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18Z" fill="#34A853"/><path d="M3.964 10.71c-.18-.54-.282-1.117-.282-1.71s.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332Z" fill="#FBBC05"/><path d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.958L3.964 6.29C4.672 4.163 6.656 3.58 9 3.58Z" fill="#EA4335"/></svg>
+            <span>Google</span>
+          </div>
+          <div class="soc-btn">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M8 .2A8 8 0 0 0 5.471 15.84c.4.073.546-.174.546-.385v-1.46c-2.22.482-2.69-.944-2.69-.944-.363-.924-.887-1.17-.887-1.17-.725-.495.055-.485.055-.485.802.056 1.224.823 1.224.823.713 1.22 1.87.868 2.327.664.072-.516.278-.868.507-1.068-1.773-.201-3.636-.886-3.636-3.944 0-.872.311-1.585.822-2.144-.083-.202-.357-1.014.077-2.114 0 0 .671-.215 2.2.82A7.653 7.653 0 0 1 8 3.97c.68.003 1.365.092 2.005.27 1.528-1.035 2.198-.82 2.198-.82.435 1.1.161 1.912.079 2.114.512.56.821 1.272.821 2.144 0 3.066-1.866 3.74-3.644 3.937.287.247.542.733.542 1.477v2.19c0 .213.144.462.55.384A8 8 0 0 0 8 .2Z" fill="var(--tp)"/></svg>
+            <span>GitHub</span>
+          </div>
+        </div>
+
+        <div class="div"><div class="div-ln"></div><span>or continue with email</span><div class="div-ln"></div></div>
+
+        <!-- Name row -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+          <div class="fld">
+            <label>First name</label>
+            <div class="fld-inp focus"><span>Hamza</span></div>
+          </div>
+          <div class="fld">
+            <label>Last name</label>
+            <div class="fld-inp"><span>Zahid</span></div>
+          </div>
+        </div>
+
+        <div class="fld">
+          <label>Email address</label>
+          <div class="fld-inp"><span style="color:var(--ts)">you@example.com</span></div>
+        </div>
+
+        <div class="fld">
+          <label>Password</label>
+          <div class="fld-inp">
+            <span style="color:var(--ts)">Min 8 characters</span>
+            <!-- strength bar -->
+            <div style="display:flex;gap:2px;align-items:center">
+              <div style="width:18px;height:3px;border-radius:2px;background:var(--ta)"></div>
+              <div style="width:18px;height:3px;border-radius:2px;background:var(--ta)"></div>
+              <div style="width:18px;height:3px;border-radius:2px;background:var(--bd2)"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Terms -->
+        <div style="display:flex;align-items:flex-start;gap:7px;margin-bottom:14px">
+          <div style="width:14px;height:14px;border-radius:4px;border:0.5px solid var(--bd2);background:var(--inp);flex-shrink:0;margin-top:1px"></div>
+          <span style="font-size:11px;color:var(--ts);line-height:1.6">I agree to the <a style="color:var(--ta)">Terms of Service</a> and <a style="color:var(--ta)">Privacy Policy</a></span>
+        </div>
+
+        <button class="sbtn">
+          <span>Create account</span>
+          <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M7 3l5 4-5 4" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+
+        <div class="note">Already have an account? <a>Sign in →</a></div>
+      </div>
+    </div>
+
+  </div>
+</div>

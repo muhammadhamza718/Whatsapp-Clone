@@ -29,20 +29,20 @@
 
 ---
 
-## Phase 1 — Authentication System
+## Phase 1 — Authentication System (Better-Auth)
 
-> Security — JWT auth with refresh token rotation.
+> Security — Managed identity with Better-Auth + Ky for secure requests.
 
-- Register with email + password
-- Login / Logout endpoints
-- JWT access token generation
-- Refresh token rotation
-- BCrypt password hashing
-- Auth middleware + protected API routes
-- Frontend auth context + React Router guards
-- Login and Register UI pages
+- Register with email + password (Better-Auth core)
+- Social Login support (Google/GitHub)
+- Session management & multi-device login
+- Secure cookie-based authentication
+- Password hashing & security best-practices (Automatic)
+- Protected API routes (Middleware)
+- Frontend Auth Client (@better-auth/client)
+- Modern Login and Register UI pages (Tailwind + Framer Motion)
 
-**Key tools:** JWT Bearer, BCrypt.Net, React Context, Axios interceptors
+**Key tools:** Better-Auth, Ky, PostgreSQL, Framer Motion
 
 ---
 
@@ -191,7 +191,7 @@
 | Phase | Focus | Category |
 |---|---|---|
 | 0 | Project setup, Docker, DB | Foundation |
-| 1 | JWT auth, register, login | Security |
+| 1 | Better-Auth, Ky, Secure Identity | Security |
 | 2 | Profiles, presence, SignalR intro | Real-time |
 | 3 | DMs, group rooms, conversation list | Core feature |
 | 4 | Send/receive messages, typing, history | SignalR |

@@ -1,26 +1,79 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Layout & Backgrounds */
+  --background: #F5F3EF;
+  --foreground: #2C2C2A;
+  
+  /* Relay Design System - Light Mode */
+  --relay-bg: #F5F3EF;
+  --relay-surf: #FAFAF8;
+  --relay-card: #FFFFFF;
+  --relay-border: rgba(0,0,0,0.09);
+  --relay-border-strong: rgba(0,0,0,0.14);
+  --relay-text-primary: #2C2C2A;
+  --relay-text-secondary: #888780;
+  --relay-accent: #0F6E56;
+  --relay-accent-alt: #1D9E75;
+  --relay-button: #0F6E56;
+  --relay-button-text: #FFFFFF;
+  --relay-input: #F5F3EF;
+  --relay-input-focus: #FFFFFF;
+  --relay-subtle: #ECEAE5;
+  --relay-social: #FAFAF8;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
+  
+  --color-relay-bg: var(--relay-bg);
+  --color-relay-surf: var(--relay-surf);
+  --color-relay-card: var(--relay-card);
+  --color-relay-border: var(--relay-border);
+  --color-relay-border-strong: var(--relay-border-strong);
+  --color-relay-text-primary: var(--relay-text-primary);
+  --color-relay-text-secondary: var(--relay-text-secondary);
+  --color-relay-accent: var(--relay-accent);
+  --color-relay-accent-alt: var(--relay-accent-alt);
+  --color-relay-btn: var(--relay-button);
+  --color-relay-btn-text: var(--relay-button-text);
+  --color-relay-input: var(--relay-input);
+  --color-relay-input-focus: var(--relay-input-focus);
+  --color-relay-subtle: var(--relay-subtle);
+  --color-relay-social: var(--relay-social);
+
+  --font-sans: "Inter", var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-geist-mono);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #191B21;
+    --foreground: #E2E0DA;
+
+    /* Relay Design System - Dark Mode */
+    --relay-bg: #191B21;
+    --relay-surf: #1D2028;
+    --relay-card: #252830;
+    --relay-border: rgba(255,255,255,0.07);
+    --relay-border-strong: rgba(255,255,255,0.12);
+    --relay-text-primary: #E2E0DA;
+    --relay-text-secondary: #888780;
+    --relay-accent: #1D9E75;
+    --relay-accent-alt: #9FE1CB;
+    --relay-button: #0F6E56;
+    --relay-button-text: #FFFFFF;
+    --relay-input: #1A1E27;
+    --relay-input-focus: #1D2028;
+    --relay-subtle: #13151A;
+    --relay-social: #1D2028;
   }
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans);
 }
+

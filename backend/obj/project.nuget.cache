@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "WYOM/AMyUy4=",
+  "dgSpecHash": "EeMyOKAaSd0=",
   "success": true,
   "projectFilePath": "F:\\Courses\\Hamza\\WhatsApp Clone\\backend\\ChatApp.Api.csproj",
   "expectedPackageFiles": [
@@ -48,11 +48,11 @@
     {
       "code": "NU1510",
       "level": "Warning",
-      "message": "PackageReference Microsoft.AspNetCore.SignalR.Common will not be pruned. Consider removing this package from your dependencies, as it is likely unnecessary.",
+      "message": "PackageReference Microsoft.AspNetCore.SignalR will not be pruned. Consider removing this package from your dependencies, as it is likely unnecessary.",
       "projectPath": "F:\\Courses\\Hamza\\WhatsApp Clone\\backend\\ChatApp.Api.csproj",
       "warningLevel": 1,
       "filePath": "F:\\Courses\\Hamza\\WhatsApp Clone\\backend\\ChatApp.Api.csproj",
-      "libraryId": "Microsoft.AspNetCore.SignalR.Common",
+      "libraryId": "Microsoft.AspNetCore.SignalR",
       "targetGraphs": [
         "net10.0"
       ]
@@ -60,11 +60,11 @@
     {
       "code": "NU1510",
       "level": "Warning",
-      "message": "PackageReference Microsoft.AspNetCore.SignalR will not be pruned. Consider removing this package from your dependencies, as it is likely unnecessary.",
+      "message": "PackageReference Microsoft.AspNetCore.SignalR.Common will not be pruned. Consider removing this package from your dependencies, as it is likely unnecessary.",
       "projectPath": "F:\\Courses\\Hamza\\WhatsApp Clone\\backend\\ChatApp.Api.csproj",
       "warningLevel": 1,
       "filePath": "F:\\Courses\\Hamza\\WhatsApp Clone\\backend\\ChatApp.Api.csproj",
-      "libraryId": "Microsoft.AspNetCore.SignalR",
+      "libraryId": "Microsoft.AspNetCore.SignalR.Common",
       "targetGraphs": [
         "net10.0"
       ]
