@@ -20,14 +20,21 @@ else
     var npgsqlBuilder = new NpgsqlConnectionStringBuilder
     {
         Host = databaseUri.Host,
-        Port = databaseUri.Port,
         Username = userInfo[0],
         Password = userInfo.Length > 1 ? userInfo[1] : "",
         Database = databaseUri.LocalPath.TrimStart('/'),
         SslMode = SslMode.Require,
         TrustServerCertificate = true // Often needed for Neon/Supabase
     };
+
+    if (databaseUri.Port > 0)
+    {
+        npgsqlBuilder.Port = databaseUri.Port;
+    }
+
     connectionString = npgsqlBuilder.ToString();
+
+
 }
 
 // Add services to the container.
