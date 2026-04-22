@@ -33,13 +33,14 @@ export default function RegisterPage() {
     resolver: zodResolver(registerSchema),
   });
 
+  // eslint-disable-next-line react-hooks/incompatible-library
   const passwordValue = watch("password", "");
 
   const handleRegister = async (values: RegisterValues) => {
     setIsLoading(true);
     setError(null);
 
-    const { data, error: authError } = await authClient.signUp.email({
+    const { error: authError } = await authClient.signUp.email({
       email: values.email,
       password: values.password,
       name: `${values.firstName} ${values.lastName}`,

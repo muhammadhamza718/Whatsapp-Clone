@@ -1,0 +1,92 @@
+{
+  "runs": [
+    {
+      "timestamp": "2026-04-22T23:45:00+05:00",
+      "score": 57,
+      "breakdown": {
+        "feature_completeness": 12,
+        "code_quality": 25,
+        "scalability": 10,
+        "future_proofing": 10
+      },
+      "tests_run": 9,
+      "passed": 5,
+      "failed": 4,
+      "warned": 0,
+      "skipped": 0,
+      "mode": "default",
+      "tests": [
+        {
+          "id": "TST-001",
+          "dimension": "Feature Completeness",
+          "target": "Phase 1: Register with email + password (auth.ts config)",
+          "result": "PASS",
+          "notes": ""
+        },
+        {
+          "id": "TST-002",
+          "dimension": "Feature Completeness",
+          "target": "Phase 1: Social Login (auth.ts config)",
+          "result": "PASS",
+          "notes": ""
+        },
+        {
+          "id": "TST-003",
+          "dimension": "Feature Completeness",
+          "target": "Phase 1: Login/Register UI pages",
+          "result": "PASS",
+          "notes": "Pages implemented with Tailwind and Framer Motion"
+        },
+        {
+          "id": "TST-004",
+          "dimension": "Feature Completeness",
+          "target": "Phase 1: Frontend Auth Client setup",
+          "result": "PASS",
+          "notes": "better-auth/client configured successfully"
+        },
+        {
+          "id": "TST-005",
+          "dimension": "Feature Completeness",
+          "target": "Phase 2: SignalR Hub exists in backend",
+          "result": "FAIL",
+          "notes": "No SignalR configuration or presence hub found in backend"
+        },
+        {
+          "id": "TST-006",
+          "dimension": "Feature Completeness",
+          "target": "Phase 2: User profile/avatar functionality in frontend",
+          "result": "FAIL",
+          "notes": "No UI or components for editing user profile/avatar"
+        },
+        {
+          "id": "TST-007",
+          "dimension": "Feature Completeness",
+          "target": "Phase 2: Presence indicator UI",
+          "result": "FAIL",
+          "notes": "No UI components for showing Online/Away/Offline status"
+        },
+        {
+          "id": "TST-008",
+          "dimension": "Feature Completeness",
+          "target": "Phase 2: SignalR connection from frontend",
+          "result": "FAIL",
+          "notes": "@microsoft/signalr is not installed in the frontend"
+        },
+        {
+          "id": "TST-009",
+          "dimension": "Code Quality",
+          "target": "Frontend Lint & Types / Backend Build",
+          "result": "PASS",
+          "notes": "Initially failed with eslint errors, fixed and passed"
+        }
+      ],
+      "fixes_verified": [
+        {
+          "fix_id": "FIX-001",
+          "test_id": "TST-009",
+          "verified": true
+        }
+      ]
+    }
+  ]
+}

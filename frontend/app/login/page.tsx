@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { authClient } from "@/lib/auth-client";
-import { Loader2, ArrowRight, Eye, EyeOff, Lock } from "lucide-react";
+import { Loader2, ArrowRight, Eye, EyeOff } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
@@ -38,7 +38,7 @@ export default function LoginPage() {
     setIsLoading(true);
     setError(null);
 
-    const { data, error: authError } = await authClient.signIn.email({
+    const { error: authError } = await authClient.signIn.email({
       email: values.email,
       password: values.password,
       rememberMe: values.rememberMe,
@@ -186,7 +186,7 @@ export default function LoginPage() {
             </button>
 
             <div className="text-[11px] text-relay-text-secondary text-center mt-[10px]">
-              Don't have an account? <Link href="/register" className="text-relay-accent hover:underline transition-all">Create one →</Link>
+              Don&apos;t have an account? <Link href="/register" className="text-relay-accent hover:underline transition-all">Create one →</Link>
             </div>
           </form>
         </div>

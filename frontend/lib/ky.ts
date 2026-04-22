@@ -4,7 +4,7 @@ export const api = ky.create({
   prefix: process.env.NEXT_PUBLIC_API_URL || "http://localhost:5100/api",
   hooks: {
     beforeRequest: [
-      (request) => {
+      (_request) => {
         // You can add logic here to inject tokens if not using cookies
         // Better Auth typically uses httpOnly cookies, so fetch/ky will send them automatically
       },
