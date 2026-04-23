@@ -1,0 +1,294 @@
+
+<h2 class="sr-only">Relay Phase 2 — User profile editor and presence system mockup, light and dark mode</h2>
+<style>
+#rp2{font-family:var(--font-sans);font-size:13px}
+#rp2[data-theme="light"]{--bg:#F5F3EF;--surf:#FAFAF8;--card:#FFFFFF;--sub:#ECEAE5;--bd:rgba(0,0,0,0.09);--bd2:rgba(0,0,0,0.14);--tp:#2C2C2A;--ts:#888780;--ta:#0F6E56;--inp:#F0EDE8;--don:#1D9E75;--day:#EF9F27;--dof:#B4B2A9;--donb:#E1F5EE;--dayb:#FAEEDA;--dofb:#F1EFE8;--dont:#085041;--dayt:#854F0B;--doft:#5F5E5A;--uplb:#E8F7F1;--chipb:#ECEAE5}
+#rp2[data-theme="dark"]{--bg:#191B21;--surf:#1D2028;--card:#252830;--sub:#13151A;--bd:rgba(255,255,255,0.07);--bd2:rgba(255,255,255,0.12);--tp:#E2E0DA;--ts:#888780;--ta:#1D9E75;--inp:#1A1E27;--don:#1D9E75;--day:#EF9F27;--dof:#5F5E5A;--donb:#04342C;--dayb:#412402;--dofb:#2C2C2A;--dont:#9FE1CB;--dayt:#FAC775;--doft:#B4B2A9;--uplb:#04342C;--chipb:#252830}
+.av{border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:500;flex-shrink:0;position:relative}
+.dot{border-radius:50%;position:absolute;bottom:-1px;right:-1px;border:2px solid var(--card)}
+.prs-pill{display:inline-flex;align-items:center;gap:6px;border-radius:20px;padding:5px 12px;font-size:11.5px;font-weight:500;cursor:pointer;border:0.5px solid transparent}
+.fld{display:flex;flex-direction:column;gap:5px;margin-bottom:13px}
+.fld label{font-size:11px;font-weight:500;color:var(--ts)}
+.fld-inp{background:var(--inp);border:0.5px solid var(--bd2);border-radius:8px;padding:8px 11px;font-size:12.5px;color:var(--tp);display:flex;align-items:center;justify-content:space-between}
+.fld-inp.on{border-color:var(--ta)}
+.sbtn{background:var(--ta);border:none;border-radius:8px;padding:9px 18px;font-size:12.5px;font-weight:500;color:#fff;cursor:pointer;display:flex;align-items:center;gap:6px}
+.user-row{display:flex;align-items:center;gap:9px;padding:8px 12px;border-radius:8px}
+.user-row:hover{background:var(--inp)}
+.sec-label{font-size:10px;font-weight:500;color:var(--ts);text-transform:uppercase;letter-spacing:0.5px;margin:0 0 8px}
+.seg{height:3px;flex:1;border-radius:2px;background:var(--inp)}
+.seg.on{background:var(--ta)}
+.card{background:var(--card);border:0.5px solid var(--bd);border-radius:12px;padding:18px}
+</style>
+
+<div id="rp2" data-theme="light">
+
+  <!-- Toolbar -->
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+    <span style="font-size:11px;color:var(--color-text-secondary)">phase 2 — profiles & presence</span>
+    <button onclick="var a=document.getElementById('rp2'),b=document.getElementById('rp2-tb');a.dataset.theme=a.dataset.theme==='light'?'dark':'light';b.textContent=a.dataset.theme==='dark'?'Light ☀':'Dark ☾'" id="rp2-tb" style="font-size:11px;padding:4px 12px;border-radius:6px;cursor:pointer;border:0.5px solid var(--color-border-secondary);background:var(--color-background-secondary);color:var(--color-text-primary)">Dark ☾</button>
+  </div>
+
+  <!-- ROW 1 — Profile editor + Presence selector -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px">
+
+    <!-- PROFILE EDITOR -->
+    <div class="card">
+      <p class="sec-label">Profile settings</p>
+
+      <!-- Avatar upload zone -->
+      <div style="display:flex;align-items:flex-end;gap:14px;margin-bottom:16px">
+        <div style="position:relative">
+          <div class="av" style="width:64px;height:64px;font-size:18px;background:#9FE1CB;color:#085041">HZ
+            <div class="dot" style="width:13px;height:13px;background:var(--don);border-color:var(--card)"></div>
+          </div>
+          <!-- Upload overlay -->
+          <div style="position:absolute;inset:0;border-radius:50%;background:rgba(0,0,0,0.28);display:flex;align-items:center;justify-content:center;cursor:pointer">
+            <svg width="16" height="16" viewBox="0 0 18 18" fill="none"><path d="M9 3v9M5 7l4-4 4 4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 14h14" stroke="white" stroke-width="1.4" stroke-linecap="round"/></svg>
+          </div>
+        </div>
+        <div>
+          <p style="font-size:12.5px;font-weight:500;color:var(--tp);margin:0 0 2px">Hamza Zahid</p>
+          <p style="font-size:11px;color:var(--ts);margin:0 0 8px">hamza@example.com</p>
+          <div style="display:flex;gap:6px">
+            <div style="background:var(--uplb);border:0.5px solid var(--bd2);border-radius:6px;padding:4px 10px;font-size:11px;color:var(--dont);cursor:pointer">Upload photo</div>
+            <div style="background:var(--inp);border:0.5px solid var(--bd2);border-radius:6px;padding:4px 10px;font-size:11px;color:var(--ts);cursor:pointer">Remove</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Initials fallback preview -->
+      <div style="background:var(--inp);border-radius:9px;padding:10px 12px;display:flex;align-items:center;gap:10px;margin-bottom:14px;border:0.5px solid var(--bd)">
+        <p style="font-size:11px;color:var(--ts);margin:0;flex:1">Initials fallback</p>
+        <div style="display:flex;gap:7px">
+          <div class="av" style="width:28px;height:28px;font-size:9px;font-weight:500;background:#CECBF6;color:#3C3489">HZ</div>
+          <div class="av" style="width:28px;height:28px;font-size:9px;font-weight:500;background:#F5C4B3;color:#712B13">AK</div>
+          <div class="av" style="width:28px;height:28px;font-size:9px;font-weight:500;background:#C0DD97;color:#3B6D11">NR</div>
+          <div class="av" style="width:28px;height:28px;font-size:9px;font-weight:500;background:#FAC775;color:#633806">ZM</div>
+        </div>
+      </div>
+
+      <div class="fld">
+        <label>Display name</label>
+        <div class="fld-inp on">
+          <span>Hamza Zahid</span>
+          <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M10 2l2 2-8 8H2v-2L10 2Z" stroke="var(--ta)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+      </div>
+      <div class="fld">
+        <label>Email address</label>
+        <div class="fld-inp"><span>hamza@example.com</span></div>
+      </div>
+
+      <div style="display:flex;justify-content:flex-end">
+        <button class="sbtn">
+          Save changes
+          <svg width="11" height="11" viewBox="0 0 14 14" fill="none"><path d="M2 7l3.5 3.5L12 3" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- PRESENCE SELECTOR -->
+    <div class="card">
+      <p class="sec-label">Presence state</p>
+      <p style="font-size:11.5px;color:var(--ts);margin:0 0 14px;line-height:1.6">Your status broadcasts to everyone in real-time via SignalR. You can override it manually, or let relay set it automatically.</p>
+
+      <!-- Three pills -->
+      <div style="display:flex;flex-direction:column;gap:7px;margin-bottom:16px">
+
+        <!-- Online — selected -->
+        <div class="prs-pill" style="background:var(--donb);border-color:var(--don)">
+          <div style="width:10px;height:10px;border-radius:50%;background:var(--don);flex-shrink:0"></div>
+          <span style="color:var(--dont);flex:1">Online</span>
+          <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M2 7l3.5 3.5L12 3" stroke="var(--don)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+
+        <!-- Away -->
+        <div class="prs-pill" style="background:var(--inp);border-color:var(--bd2)">
+          <div style="width:10px;height:10px;border-radius:50%;background:var(--day);flex-shrink:0"></div>
+          <span style="color:var(--tp);flex:1">Away</span>
+          <span style="font-size:10px;color:var(--ts)">auto after 5 min</span>
+        </div>
+
+        <!-- Offline -->
+        <div class="prs-pill" style="background:var(--inp);border-color:var(--bd2)">
+          <div style="width:10px;height:10px;border-radius:50%;background:var(--dof);flex-shrink:0"></div>
+          <span style="color:var(--tp);flex:1">Appear offline</span>
+          <span style="font-size:10px;color:var(--ts)">on disconnect</span>
+        </div>
+      </div>
+
+      <!-- Auto-away rule info -->
+      <div style="background:var(--inp);border:0.5px solid var(--bd);border-radius:9px;padding:10px 12px;margin-bottom:14px">
+        <div style="display:flex;align-items:center;gap:7px;margin-bottom:6px">
+          <svg width="13" height="13" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6.5" stroke="var(--ts)" stroke-width="1.2"/><path d="M8 5v3.5l2 2" stroke="var(--ts)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span style="font-size:11px;font-weight:500;color:var(--tp)">Auto-Away timer</span>
+        </div>
+        <!-- Timer bar -->
+        <div style="display:flex;gap:2px;margin-bottom:5px">
+          <div class="seg on"></div><div class="seg on"></div><div class="seg on"></div>
+          <div class="seg"></div><div class="seg"></div>
+        </div>
+        <p style="font-size:10.5px;color:var(--ts);margin:0">3 of 5 minutes idle — switching to Away in 2 min</p>
+      </div>
+
+      <!-- SignalR badge -->
+      <div style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--donb);border-radius:8px;border:0.5px solid var(--don)">
+        <div style="width:7px;height:7px;border-radius:50%;background:var(--don);flex-shrink:0"></div>
+        <span style="font-size:11px;color:var(--dont)">SignalR hub connected — broadcasting to 4 clients</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ROW 2 — Live presence list + Offline last-seen component -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+
+    <!-- LIVE PRESENCE LIST (what others see) -->
+    <div class="card">
+      <p class="sec-label">Who's online now</p>
+
+      <div style="display:flex;flex-direction:column;gap:2px">
+
+        <!-- Online -->
+        <div class="user-row">
+          <div class="av" style="width:34px;height:34px;font-size:11px;background:#9FE1CB;color:#085041">HZ
+            <div class="dot" style="width:10px;height:10px;background:var(--don)"></div>
+          </div>
+          <div style="flex:1;min-width:0">
+            <p style="font-size:12.5px;font-weight:500;color:var(--tp);margin:0">Hamza Zahid</p>
+            <p style="font-size:10.5px;color:var(--don);margin:0">Online</p>
+          </div>
+          <span style="font-size:10px;color:var(--ts)">you</span>
+        </div>
+
+        <!-- Online -->
+        <div class="user-row">
+          <div class="av" style="width:34px;height:34px;font-size:11px;background:#CECBF6;color:#3C3489">AK
+            <div class="dot" style="width:10px;height:10px;background:var(--don)"></div>
+          </div>
+          <div style="flex:1;min-width:0">
+            <p style="font-size:12.5px;font-weight:500;color:var(--tp);margin:0">Aisha Khan</p>
+            <p style="font-size:10.5px;color:var(--don);margin:0">Online</p>
+          </div>
+        </div>
+
+        <!-- Away -->
+        <div class="user-row">
+          <div class="av" style="width:34px;height:34px;font-size:11px;background:#C0DD97;color:#3B6D11">NR
+            <div class="dot" style="width:10px;height:10px;background:var(--day)"></div>
+          </div>
+          <div style="flex:1;min-width:0">
+            <p style="font-size:12.5px;font-weight:500;color:var(--tp);margin:0">Nadia R.</p>
+            <p style="font-size:10.5px;color:var(--day);margin:0">Away</p>
+          </div>
+          <span style="font-size:10px;color:var(--ts)">idle 7m</span>
+        </div>
+
+        <!-- Offline + last seen -->
+        <div class="user-row">
+          <div class="av" style="width:34px;height:34px;font-size:11px;background:#F5C4B3;color:#712B13;opacity:0.7">ZM
+            <div class="dot" style="width:10px;height:10px;background:var(--dof)"></div>
+          </div>
+          <div style="flex:1;min-width:0">
+            <p style="font-size:12.5px;font-weight:500;color:var(--ts);margin:0">Zaid M.</p>
+            <p style="font-size:10.5px;color:var(--dof);margin:0">Offline</p>
+          </div>
+          <span style="font-size:10px;color:var(--ts)">2h ago</span>
+        </div>
+
+        <!-- Offline + last seen exact -->
+        <div class="user-row">
+          <div class="av" style="width:34px;height:34px;font-size:11px;background:#FAC775;color:#633806;opacity:0.7">SM
+            <div class="dot" style="width:10px;height:10px;background:var(--dof)"></div>
+          </div>
+          <div style="flex:1;min-width:0">
+            <p style="font-size:12.5px;font-weight:500;color:var(--ts);margin:0">Sara M.</p>
+            <p style="font-size:10.5px;color:var(--dof);margin:0">Offline</p>
+          </div>
+          <span style="font-size:10px;color:var(--ts)">Yesterday</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- PRESENCE DOT COMPONENT SPEC + LAST SEEN DETAIL -->
+    <div class="card">
+      <p class="sec-label">Presence indicator — component spec</p>
+
+      <!-- Dot sizes -->
+      <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:16px">
+
+        <!-- SM -->
+        <div style="display:flex;align-items:center;gap:12px;padding:8px 10px;background:var(--inp);border-radius:8px">
+          <div style="display:flex;gap:8px;align-items:center">
+            <div class="av" style="width:24px;height:24px;font-size:8px;background:#9FE1CB;color:#085041">HZ<div class="dot" style="width:7px;height:7px;background:var(--don)"></div></div>
+            <div class="av" style="width:24px;height:24px;font-size:8px;background:#C0DD97;color:#3B6D11">NR<div class="dot" style="width:7px;height:7px;background:var(--day)"></div></div>
+            <div class="av" style="width:24px;height:24px;font-size:8px;background:#F5C4B3;color:#712B13">ZM<div class="dot" style="width:7px;height:7px;background:var(--dof)"></div></div>
+          </div>
+          <div>
+            <p style="font-size:11px;font-weight:500;color:var(--tp);margin:0">sm — 24px avatar</p>
+            <p style="font-size:10.5px;color:var(--ts);margin:0">7px dot · sidebar list</p>
+          </div>
+        </div>
+
+        <!-- MD -->
+        <div style="display:flex;align-items:center;gap:12px;padding:8px 10px;background:var(--inp);border-radius:8px">
+          <div style="display:flex;gap:8px;align-items:center">
+            <div class="av" style="width:34px;height:34px;font-size:11px;background:#9FE1CB;color:#085041">HZ<div class="dot" style="width:10px;height:10px;background:var(--don)"></div></div>
+            <div class="av" style="width:34px;height:34px;font-size:11px;background:#C0DD97;color:#3B6D11">NR<div class="dot" style="width:10px;height:10px;background:var(--day)"></div></div>
+            <div class="av" style="width:34px;height:34px;font-size:11px;background:#F5C4B3;color:#712B13">ZM<div class="dot" style="width:10px;height:10px;background:var(--dof)"></div></div>
+          </div>
+          <div>
+            <p style="font-size:11px;font-weight:500;color:var(--tp);margin:0">md — 34px avatar</p>
+            <p style="font-size:10.5px;color:var(--ts);margin:0">10px dot · chat header · presence list</p>
+          </div>
+        </div>
+
+        <!-- LG -->
+        <div style="display:flex;align-items:center;gap:12px;padding:8px 10px;background:var(--inp);border-radius:8px">
+          <div style="display:flex;gap:8px;align-items:center">
+            <div class="av" style="width:48px;height:48px;font-size:15px;background:#9FE1CB;color:#085041">HZ<div class="dot" style="width:13px;height:13px;background:var(--don)"></div></div>
+            <div class="av" style="width:48px;height:48px;font-size:15px;background:#C0DD97;color:#3B6D11">NR<div class="dot" style="width:13px;height:13px;background:var(--day)"></div></div>
+            <div class="av" style="width:48px;height:48px;font-size:15px;background:#F5C4B3;color:#712B13">ZM<div class="dot" style="width:13px;height:13px;background:var(--dof)"></div></div>
+          </div>
+          <div>
+            <p style="font-size:11px;font-weight:500;color:var(--tp);margin:0">lg — 48px avatar</p>
+            <p style="font-size:10.5px;color:var(--ts);margin:0">13px dot · profile page · member panel</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Last-seen detail states -->
+      <p class="sec-label">Last seen — display rules</p>
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 10px;background:var(--inp);border-radius:7px">
+          <div style="display:flex;align-items:center;gap:6px">
+            <div style="width:8px;height:8px;border-radius:50%;background:var(--don)"></div>
+            <span style="font-size:11.5px;color:var(--tp)">Online</span>
+          </div>
+          <span style="font-size:11px;color:var(--don)">Online now</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 10px;background:var(--inp);border-radius:7px">
+          <div style="display:flex;align-items:center;gap:6px">
+            <div style="width:8px;height:8px;border-radius:50%;background:var(--day)"></div>
+            <span style="font-size:11.5px;color:var(--tp)">Away</span>
+          </div>
+          <span style="font-size:11px;color:var(--day)">Away · idle 7 min</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 10px;background:var(--inp);border-radius:7px">
+          <div style="display:flex;align-items:center;gap:6px">
+            <div style="width:8px;height:8px;border-radius:50%;background:var(--dof)"></div>
+            <span style="font-size:11.5px;color:var(--ts)">Offline (recent)</span>
+          </div>
+          <span style="font-size:11px;color:var(--ts)">Last seen 2h ago</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 10px;background:var(--inp);border-radius:7px">
+          <div style="display:flex;align-items:center;gap:6px">
+            <div style="width:8px;height:8px;border-radius:50%;background:var(--dof)"></div>
+            <span style="font-size:11.5px;color:var(--ts)">Offline (old)</span>
+          </div>
+          <span style="font-size:11px;color:var(--ts)">Last seen Yesterday</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

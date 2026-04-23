@@ -43,6 +43,6 @@ export async function proxy(request: NextRequest) {
 
 // Next.js 16 matcher configuration
 export const config = {
-  // Protect all API routes and future protected pages like /dashboard
-  matcher: ['/dashboard/:path*', '/api/:path*'],
+  // Protect root path, dashboard, and all API routes
+  matcher: ['/', '/dashboard/:path*', '/api/:path*'],
 };

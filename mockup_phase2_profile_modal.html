@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relay — Profile Modal Mockup</title>
+    <style>
+        :root {
+            --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+
+        /* LIGHT THEME (Base) */
+        #rly {
+            --bp: #F5F3EF; --bs: #ECEAE5; --bc: #FAFAF8; --bi: #E8E5DF; --bg2: #DEDAD2;
+            --mo: #9FE1CB; --mt: #085041; --mx: #FFFFFF; --mxt: #2C2C2A; --ma: #E0DDD6;
+            --tp: #2C2C2A; --ts: #888780; --ta: #0F6E56; --bd: rgba(0,0,0,0.09);
+            --don: #1D9E75; --day: #EF9F27; --dof: #B4B2A9;
+            --inp: #F0EDE8; --uplb: #E8F7F1; --bd2: rgba(0,0,0,0.14); --dont: #085041;
+        }
+
+        /* DARK THEME */
+        #rly[data-theme="dark"] {
+            --bp: #191B21; --bs: #13151A; --bc: #1D2028; --bi: #252830; --bg2: #1A1E27;
+            --mo: #085041; --mt: #9FE1CB; --mx: #252B36; --mxt: #D3D1C7; --ma: #282D38;
+            --tp: #E2E0DA; --ts: #888780; --ta: #1D9E75; --bd: rgba(255,255,255,0.07);
+            --don: #1D9E75; --day: #EF9F27; --dof: #5F5E5A;
+            --inp: #1A1E27; --uplb: #04342C; --bd2: rgba(255,255,255,0.12); --dont: #9FE1CB;
+        }
+
+        #rly {
+            font-family: var(--font-sans);
+            font-size: 13px;
+            height: 100vh;
+            background: var(--bp);
+            color: var(--tp);
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .ci { padding: 7px 8px; cursor: pointer; display: flex; align-items: center; gap: 8px; border-radius: 8px; margin: 1px 8px; }
+        .ci:hover, .ci.act { background: var(--ma); }
+        .av { border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 500; flex-shrink: 0; position: relative; }
+        .dot { border-radius: 50%; position: absolute; bottom: -1px; right: -1px; border: 2px solid var(--bs); }
+        .bub { padding: 8px 11px; border-radius: 12px; line-height: 1.55; font-size: 12.5px; }
+        .tin { background: var(--mx); color: var(--mxt); border-bottom-left-radius: 3px; }
+        .tout { background: var(--mo); color: var(--mt); border-bottom-right-radius: 3px; }
+        .lbl { font-size: 10px; font-weight: 500; color: var(--ts); text-transform: uppercase; letter-spacing: 0.5px; padding: 8px 16px 3px; }
+        .bdg { background: #D85A30; color: #fff; font-size: 9px; font-weight: 500; border-radius: 20px; padding: 1px 5px; min-width: 16px; text-align: center; }
+        .td { width: 5px; height: 5px; border-radius: 50%; background: var(--ts); }
+        @keyframes rlyb { 0%, 60%, 100% { transform: translateY(0) } 30% { transform: translateY(-3px) } }
+
+        /* MODAL STYLES */
+        .modal-backdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(2px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+        }
+        .modal-content {
+            background: var(--mx);
+            border: 0.5px solid var(--bd);
+            border-radius: 14px;
+            width: 400px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+            overflow: hidden;
+            animation: modalFadeIn 0.2s ease-out;
+        }
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: translateY(10px) scale(0.98); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .card { background: var(--mx); padding: 18px; }
+        .sec-label { font-size: 10px; font-weight: 500; color: var(--ts); text-transform: uppercase; letter-spacing: 0.5px; margin: 0 0 8px; }
+        .fld { display: flex; flex-direction: column; gap: 5px; margin-bottom: 13px; }
+        .fld label { font-size: 11px; font-weight: 500; color: var(--ts); }
+        .fld-inp { background: var(--inp); border: 0.5px solid var(--bd2); border-radius: 8px; padding: 8px 11px; font-size: 12.5px; color: var(--tp); display: flex; align-items: center; justify-content: space-between; }
+        .fld-inp.on { border-color: var(--ta); }
+        .sbtn { background: var(--ta); border: none; border-radius: 8px; padding: 9px 18px; font-size: 12.5px; font-weight: 500; color: #fff; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: opacity 0.2s; }
+        .sbtn:hover { opacity: 0.9; }
+
+        .close-btn {
+            background: none; border: none; cursor: pointer; color: var(--ts); padding: 4px; border-radius: 6px; display: flex; align-items: center; justify-content: center;
+        }
+        .close-btn:hover { background: var(--bg2); color: var(--tp); }
+    </style>
+</head>
+<body style="margin:0">
+
+<div id="rly" data-theme="light">
+  <!-- Layout from relay_chat_ui_light_dark.html -->
+  <div style="display:flex;height:100vh">
+
+    <!-- SIDEBAR -->
+    <div style="width:212px;background:var(--bs);display:flex;flex-direction:column;border-right:0.5px solid var(--bd);flex-shrink:0">
+      <div style="padding:13px 16px;border-bottom:0.5px solid var(--bd);display:flex;align-items:center;justify-content:space-between">
+        <span style="font-size:19px;font-weight:500;color:var(--ta);letter-spacing:-1px">relay</span>
+        <svg width="15" height="15" viewBox="0 0 18 18" fill="none"><path d="M2 5h14M2 9h10M2 13h7" stroke="var(--ts)" stroke-width="1.4" stroke-linecap="round"/></svg>
+      </div>
+
+      <div style="padding:10px 10px 6px">
+        <div style="background:var(--bg2);border-radius:8px;padding:6px 10px;display:flex;align-items:center;gap:6px;border:0.5px solid var(--bd)">
+          <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><circle cx="6.5" cy="6.5" r="5" stroke="var(--ts)" stroke-width="1.5"/><path d="M11 11l3.5 3.5" stroke="var(--ts)" stroke-width="1.5" stroke-linecap="round"/></svg>
+          <span style="color:var(--ts);font-size:11.5px">Search...</span>
+        </div>
+      </div>
+
+      <div class="lbl">Direct messages</div>
+      <div class="ci act">
+        <div class="av" style="width:30px;height:30px;background:#9FE1CB;color:#085041">AK<div class="dot" style="width:9px;height:9px;background:var(--don);border-color:var(--bs)"></div></div>
+        <div style="flex:1">
+          <div style="display:flex;justify-content:space-between"><span style="font-weight:500;font-size:12px">Aisha Khan</span><span style="font-size:10px;color:var(--ts)">now</span></div>
+          <div style="font-size:11px;color:var(--ts)">I love the sidebar...</div>
+        </div>
+      </div>
+
+      <div style="flex:1"></div>
+
+      <!-- User profile at bottom -->
+      <div style="padding:10px 12px;border-top:0.5px solid var(--bd);display:flex;align-items:center;gap:8px">
+        <div class="av" style="background:#9FE1CB;color:#085041;width:32px;height:32px">HZ<div class="dot" style="width:10px;height:10px;background:var(--don);border-color:var(--bs)"></div></div>
+        <div style="flex:1;min-width:0">
+          <div style="font-size:12px;font-weight:500">Hamza Zahid</div>
+          <div style="font-size:10.5px;color:var(--don)">Online</div>
+        </div>
+        <svg width="16" height="16" viewBox="0 0 20 20" fill="none"><circle cx="4" cy="10" r="1.5" fill="var(--ts)"/><circle cx="10" cy="10" r="1.5" fill="var(--ts)"/><circle cx="16" cy="10" r="1.5" fill="var(--ts)"/></svg>
+      </div>
+    </div>
+
+    <!-- MAIN CHAT AREA -->
+    <div style="flex:1;background:var(--bc);display:flex;flex-direction:column;min-width:0">
+      <div style="padding:10px 16px;border-bottom:0.5px solid var(--bd);display:flex;align-items:center;gap:10px">
+        <div class="av" style="background:#9FE1CB;color:#085041;width:34px;height:34px">AK<div class="dot" style="width:10px;height:10px;background:var(--don);border-color:var(--bc)"></div></div>
+        <div style="flex:1">
+          <div style="font-size:13.5px;font-weight:500">Aisha Khan</div>
+          <div style="font-size:10.5px;color:var(--don)">Online</div>
+        </div>
+      </div>
+
+      <div style="flex:1;padding:20px;display:flex;flex-direction:column;gap:12px">
+        <div style="display:flex;gap:8px;align-items:flex-end">
+           <div class="av" style="width:26px;height:26px;background:#9FE1CB;color:#085041">AK</div>
+           <div class="bub tin">Hey! Did you check the new designs? 👀</div>
+        </div>
+      </div>
+
+      <div style="padding:10px 14px;border-top:0.5px solid var(--bd);background:var(--bi);display:flex;align-items:center;gap:8px">
+        <div style="flex:1;background:var(--bc);border-radius:10px;padding:7px 12px;font-size:12.5px;color:var(--ts);border:0.5px solid var(--bd)">Type a message...</div>
+        <button style="background:var(--ta);border:none;padding:7px 14px;border-radius:8px;color:#fff;font-size:12px;font-weight:500">Send</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- THE MODAL -->
+  <div class="modal-backdrop">
+    <div class="modal-content">
+      <!-- Modal Header -->
+      <div style="padding:14px 18px;border-bottom:0.5px solid var(--bd);display:flex;align-items:center;justify-content:space-between;background:var(--bs)">
+        <span style="font-size:13px;font-weight:600">Profile Settings</span>
+        <button class="close-btn">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M12 4l-8 8M4 4l8 8"/></svg>
+        </button>
+      </div>
+
+      <div class="card">
+        <!-- Avatar Section -->
+        <div style="display:flex;align-items:flex-end;gap:14px;margin-bottom:20px">
+          <div style="position:relative">
+            <div class="av" style="width:64px;height:64px;font-size:18px;background:#9FE1CB;color:#085041">HZ
+              <div class="dot" style="width:13px;height:13px;background:var(--don);border-color:var(--mx)"></div>
+            </div>
+            <div style="position:absolute;inset:0;border-radius:50%;background:rgba(0,0,0,0.28);display:flex;align-items:center;justify-content:center;cursor:pointer">
+              <svg width="16" height="16" viewBox="0 0 18 18" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round"><path d="M9 3v9M5 7l4-4 4 4M2 14h14"/></svg>
+            </div>
+          </div>
+          <div>
+            <p style="font-size:12.5px;font-weight:500;margin:0 0 2px">Hamza Zahid</p>
+            <p style="font-size:11px;color:var(--ts);margin:0 0 8px">hamza@example.com</p>
+            <div style="display:flex;gap:6px">
+              <div style="background:var(--uplb);border:0.5px solid var(--bd2);border-radius:6px;padding:4px 10px;font-size:11px;color:var(--dont);cursor:pointer">Upload photo</div>
+              <div style="background:var(--inp);border:0.5px solid var(--bd2);border-radius:6px;padding:4px 10px;font-size:11px;color:var(--ts);cursor:pointer">Remove</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Fallback Preview -->
+        <div style="background:var(--inp);border-radius:9px;padding:10px 12px;display:flex;align-items:center;gap:10px;margin-bottom:16px;border:0.5px solid var(--bd)">
+          <p style="font-size:11px;color:var(--ts);margin:0;flex:1">Initials fallback</p>
+          <div style="display:flex;gap:7px">
+            <div class="av" style="width:28px;height:28px;font-size:9px;background:#CECBF6;color:#3C3489">HZ</div>
+            <div class="av" style="width:28px;height:28px;font-size:9px;background:#F5C4B3;color:#712B13">AK</div>
+            <div class="av" style="width:28px;height:28px;font-size:9px;background:#C0DD97;color:#3B6D11">NR</div>
+          </div>
+        </div>
+
+        <!-- Form Fields -->
+        <div class="fld">
+          <label>Display name</label>
+          <div class="fld-inp on">
+            <span>Hamza Zahid</span>
+            <svg width="12" height="12" viewBox="0 0 14 14" fill="none" stroke="var(--ta)" stroke-width="1.3"><path d="M10 2l2 2-8 8H2v-2L10 2Z"/></svg>
+          </div>
+        </div>
+        <div class="fld">
+          <label>Email address</label>
+          <div class="fld-inp"><span>hamza@example.com</span></div>
+        </div>
+
+        <div style="display:flex;justify-content:flex-end;margin-top:8px">
+          <button class="sbtn">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Theme toggle for demo -->
+  <button onclick="var a=document.getElementById('rly');a.dataset.theme=a.dataset.theme==='light'?'dark':'light';" style="position:fixed;bottom:20px;right:20px;z-index:200;padding:8px 16px;border-radius:8px;cursor:pointer;border:0.5px solid var(--bd);background:var(--mx);color:var(--tp);font-size:11px">Toggle Theme ☀/☾</button>
+
+</div>
+
+</body>
+</html>
