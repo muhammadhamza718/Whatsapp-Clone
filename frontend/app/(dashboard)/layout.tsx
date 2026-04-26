@@ -4,16 +4,27 @@ import { useState } from "react";
 import { authClient } from "@/lib/auth-client";
 import { Avatar } from "@/components/ui/Avatar";
 import { ProfileModal } from "./components/ProfileModal";
+import { ChatSidebar } from "./components/ChatSidebar";
 import { MessageSquare, Users, Settings, LogOut } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { PresenceProvider, usePresence } from "@/lib/presence/PresenceProvider";
 
 export default function DashboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  return (
+    <PresenceProvider>
+      <DashboardContent>{children}</DashboardContent>
+    </PresenceProvider>
+  );
+}
+
+function DashboardContent({ children }: { children: React.ReactNode }) {
   const { data: session } = authClient.useSession();
   const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const { status } = usePresence();
 
   const handleLogout = async () => {
     await authClient.signOut();
@@ -42,6 +53,7 @@ export default function DashboardLayout({
               name={session?.user?.name}
               size="md"
               showDot
+              status={status}
             />
             <div className="absolute left-full ml-3 px-2 py-1 bg-zinc-900 text-white text-[10px] rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
               Profile Settings
@@ -58,8 +70,11 @@ export default function DashboardLayout({
         </div>
       </aside>
 
+      {/* Chat List Sidebar */}
+      <ChatSidebar />
+
       {/* Main Content */}
-      <main className="flex-1 flex flex-col min-w-0 bg-relay-card shadow-sm border-l border-relay-border">
+      <main className="flex-1 flex flex-col min-w-0 bg-relay-card shadow-sm">
         {children}
       </main>
 

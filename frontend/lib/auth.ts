@@ -8,6 +8,18 @@ const pool = new Pool({
 
 export const auth = betterAuth({
   database: pool,
+  user: {
+    additionalFields: {
+      status: {
+        type: "string",
+        defaultValue: "offline",
+      },
+      lastSeenAt: {
+        type: "date",
+        defaultValue: new Date(),
+      },
+    },
+  },
   emailAndPassword: {
     enabled: true,
   },

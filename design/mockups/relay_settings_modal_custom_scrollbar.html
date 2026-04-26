@@ -1,0 +1,205 @@
+
+<style>
+#rm{font-family:var(--font-sans);font-size:13px}
+#rm[data-theme="light"]{--bp:#F5F3EF;--bs:#ECEAE5;--bc:#FAFAF8;--bi:#E8E5DF;--bg2:#DEDAD2;--mo:#9FE1CB;--mt:#085041;--mx:#FFFFFF;--mxt:#2C2C2A;--ma:#E0DDD6;--tp:#2C2C2A;--ts:#888780;--ta:#0F6E56;--bd:rgba(0,0,0,0.09);--bd2:rgba(0,0,0,0.14);--don:#1D9E75;--day:#EF9F27;--dof:#B4B2A9;--card:#FFFFFF;--inp:#F0EDE8;--donb:#E1F5EE;--dont:#085041;--uplb:#E8F7F1;--overlay:rgba(30,28,26,0.45);--sb-thumb:#0F6E56}
+#rm[data-theme="dark"]{--bp:#191B21;--bs:#13151A;--bc:#1D2028;--bi:#252830;--bg2:#1A1E27;--mo:#085041;--mt:#9FE1CB;--mx:#252B36;--mxt:#D3D1C7;--ma:#282D38;--tp:#E2E0DA;--ts:#888780;--ta:#1D9E75;--bd:rgba(255,255,255,0.07);--bd2:rgba(255,255,255,0.12);--don:#1D9E75;--day:#EF9F27;--dof:#5F5E5A;--card:#252830;--inp:#1A1E27;--donb:#04342C;--dont:#9FE1CB;--uplb:#04342C;--overlay:rgba(10,11,14,0.6);--sb-thumb:#1D9E75}
+
+/* ── Custom scrollbar ── */
+.modal-scroll{scrollbar-width:thin;scrollbar-color:var(--sb-thumb) transparent}
+.modal-scroll::-webkit-scrollbar{width:4px}
+.modal-scroll::-webkit-scrollbar-track{background:transparent}
+.modal-scroll::-webkit-scrollbar-thumb{background:var(--sb-thumb);border-radius:99px}
+.modal-scroll::-webkit-scrollbar-thumb:hover{opacity:0.8}
+
+.av{border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:500;flex-shrink:0;position:relative}
+.dot{border-radius:50%;position:absolute;bottom:-1px;right:-1px;border:2px solid var(--bs)}
+.ci{padding:7px 8px;cursor:pointer;display:flex;align-items:center;gap:8px;border-radius:8px;margin:1px 8px}
+.ci.act{background:var(--ma)}
+.bub{padding:8px 11px;border-radius:12px;line-height:1.55;font-size:12.5px}
+.tin{background:var(--mx);color:var(--mxt);border-bottom-left-radius:3px}
+.tout{background:var(--mo);color:var(--mt);border-bottom-right-radius:3px}
+.bdg{background:#D85A30;color:#fff;font-size:9px;font-weight:500;border-radius:20px;padding:1px 5px}
+.fld{display:flex;flex-direction:column;gap:5px;margin-bottom:14px}
+.fld label{font-size:11px;font-weight:500;color:var(--ts)}
+.fld-inp{background:var(--inp);border:0.5px solid var(--bd2);border-radius:8px;padding:9px 11px;font-size:12.5px;color:var(--tp);display:flex;align-items:center;justify-content:space-between}
+.fld-inp.on{border-color:var(--ta)}
+.sbtn{background:var(--ta);border:none;border-radius:8px;padding:9px 18px;font-size:12.5px;font-weight:500;color:#fff;cursor:pointer;display:flex;align-items:center;gap:6px}
+.prs-pill{display:flex;align-items:center;gap:8px;border-radius:10px;padding:9px 12px;cursor:pointer;border:0.5px solid transparent;margin-bottom:7px}
+.sec{font-size:10px;font-weight:500;color:var(--ts);text-transform:uppercase;letter-spacing:0.5px;margin:0 0 10px}
+.seg{height:3px;flex:1;border-radius:2px;background:var(--bd2)}
+.seg.on{background:var(--ta)}
+.nav-item{padding:8px 12px;border-radius:8px;font-size:12.5px;cursor:pointer;display:flex;align-items:center;gap:8px;color:var(--ts)}
+.nav-item.on{background:var(--donb);color:var(--dont);font-weight:500}
+.nav-item:hover:not(.on){background:var(--inp)}
+.td{width:5px;height:5px;border-radius:50%;background:var(--ts)}
+</style>
+
+<div id="rm" data-theme="light">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+    <span style="font-size:11px;color:var(--color-text-secondary)">settings modal — custom teal scrollbar</span>
+    <div style="display:flex;gap:8px">
+      <button id="rm-toggle-modal" onclick="var m=document.getElementById('rm-modal-layer');m.style.display=m.style.display==='none'?'flex':'none';this.textContent=m.style.display==='none'?'Open Settings ⚙':'Close Settings ✕'" style="font-size:11px;padding:4px 12px;border-radius:6px;cursor:pointer;border:none;background:var(--ta);color:#fff">Close Settings ✕</button>
+      <button onclick="var a=document.getElementById('rm'),b=document.getElementById('rm-tb');a.dataset.theme=a.dataset.theme==='light'?'dark':'light';b.textContent=a.dataset.theme==='dark'?'Light ☀':'Dark ☾'" id="rm-tb" style="font-size:11px;padding:4px 12px;border-radius:6px;cursor:pointer;border:0.5px solid var(--color-border-secondary);background:var(--color-background-secondary);color:var(--color-text-primary)">Dark ☾</button>
+    </div>
+  </div>
+
+  <div style="position:relative;border-radius:12px;overflow:hidden;border:0.5px solid var(--bd);height:520px">
+
+    <!-- Blurred chat behind -->
+    <div style="display:flex;height:100%;background:var(--bp);filter:blur(3px) brightness(0.88);pointer-events:none;user-select:none">
+      <div style="width:200px;background:var(--bs);border-right:0.5px solid var(--bd);display:flex;flex-direction:column;flex-shrink:0">
+        <div style="padding:13px 16px;border-bottom:0.5px solid var(--bd)"><span style="font-size:19px;font-weight:500;color:var(--ta);letter-spacing:-1px">relay</span></div>
+        <div style="padding:10px"><div style="background:var(--bg2);border-radius:8px;padding:6px 10px;border:0.5px solid var(--bd)"><span style="color:var(--ts);font-size:11.5px">Search…</span></div></div>
+        <div style="font-size:10px;font-weight:500;color:var(--ts);text-transform:uppercase;letter-spacing:0.5px;padding:8px 16px 3px">Direct messages</div>
+        <div class="ci act">
+          <div class="av" style="background:#CECBF6;color:#3C3489;width:30px;height:30px;font-size:10px">AK<div class="dot" style="background:var(--don)"></div></div>
+          <div style="flex:1;min-width:0"><div style="font-size:12px;font-weight:500;color:var(--tp)">Aisha Khan</div><div style="font-size:11px;color:var(--ts);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Right? I love the sidebar…</div></div>
+        </div>
+        <div class="ci">
+          <div class="av" style="background:#F5C4B3;color:#712B13;width:30px;height:30px;font-size:10px">ZM<div class="dot" style="background:var(--dof)"></div></div>
+          <div style="flex:1;min-width:0"><div style="display:flex;justify-content:space-between"><span style="font-size:12px;font-weight:500;color:var(--tp)">Zaid M.</span><span class="bdg">3</span></div><div style="font-size:11px;font-weight:500;color:var(--tp)">Can you review my PR?</div></div>
+        </div>
+        <div style="flex:1"></div>
+        <div style="padding:10px 12px;border-top:0.5px solid var(--bd);display:flex;align-items:center;gap:8px">
+          <div class="av" style="background:#9FE1CB;color:#085041;width:32px;height:32px">HZ<div class="dot" style="background:var(--don);border-color:var(--bs)"></div></div>
+          <div><div style="font-size:12px;font-weight:500;color:var(--tp)">Hamza Z.</div><div style="font-size:10.5px;color:var(--don)">Online</div></div>
+        </div>
+      </div>
+      <div style="flex:1;background:var(--bc);display:flex;flex-direction:column">
+        <div style="padding:10px 16px;border-bottom:0.5px solid var(--bd);display:flex;align-items:center;gap:10px">
+          <div class="av" style="background:#CECBF6;color:#3C3489;width:34px;height:34px;font-size:11px">AK<div class="dot" style="background:var(--don);border-color:var(--bc)"></div></div>
+          <div><div style="font-size:13.5px;font-weight:500;color:var(--tp)">Aisha Khan</div><div style="font-size:10.5px;color:var(--don)">Online</div></div>
+        </div>
+        <div style="flex:1;padding:14px 16px;display:flex;flex-direction:column;gap:10px;overflow:hidden">
+          <div style="display:flex;gap:8px;align-items:flex-end"><div class="av" style="background:#CECBF6;color:#3C3489;width:26px;height:26px">AK</div><div class="bub tin">Hey! Did you check the new designs? 👀</div></div>
+          <div style="display:flex;flex-direction:column;align-items:flex-end"><div class="bub tout">Just opened them. Really clean 👌</div></div>
+          <div style="display:flex;gap:8px;align-items:flex-end"><div class="av" style="background:#CECBF6;color:#3C3489;width:26px;height:26px">AK</div><div class="bub tin">Right? Sidebar keeps it minimal</div></div>
+        </div>
+        <div style="padding:6px 16px;display:flex;align-items:center;gap:6px">
+          <div style="display:flex;gap:3px"><div class="td"></div><div class="td"></div><div class="td"></div></div>
+          <span style="font-size:11.5px;color:var(--ts)">Aisha is typing…</span>
+        </div>
+        <div style="padding:10px 14px;border-top:0.5px solid var(--bd);background:var(--bi);display:flex;align-items:center;gap:8px">
+          <div style="flex:1;background:var(--bc);border-radius:10px;padding:7px 12px;font-size:12.5px;color:var(--ts);border:0.5px solid var(--bd)">Type a message…</div>
+          <button style="background:var(--ta);border:none;padding:7px 14px;border-radius:8px"><span style="font-size:12px;color:#fff;font-weight:500">Send →</span></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Overlay + Modal -->
+    <div id="rm-modal-layer" style="position:absolute;inset:0;background:var(--overlay);display:flex;align-items:flex-start;justify-content:center;padding:20px 0;overflow-y:auto">
+      <div style="width:480px;background:var(--card);border-radius:14px;border:0.5px solid var(--bd2);overflow:hidden;flex-shrink:0">
+
+        <!-- Modal header -->
+        <div style="padding:14px 18px;border-bottom:0.5px solid var(--bd);display:flex;align-items:center;justify-content:space-between;background:var(--bs);position:sticky;top:0;z-index:2">
+          <div style="display:flex;align-items:center;gap:10px">
+            <span style="font-size:18px;font-weight:500;color:var(--ta);letter-spacing:-0.8px">relay</span>
+            <span style="font-size:11px;color:var(--ts);padding:2px 8px;background:var(--inp);border-radius:20px;border:0.5px solid var(--bd2)">Settings</span>
+          </div>
+          <button onclick="document.getElementById('rm-modal-layer').style.display='none';document.getElementById('rm-toggle-modal').textContent='Open Settings ⚙'" style="background:var(--inp);border:none;cursor:pointer;width:26px;height:26px;border-radius:6px;display:flex;align-items:center;justify-content:center">
+            <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M2 2l10 10M12 2L2 12" stroke="var(--ts)" stroke-width="1.6" stroke-linecap="round"/></svg>
+          </button>
+        </div>
+
+        <!-- Nav tabs sticky -->
+        <div style="display:flex;gap:4px;padding:10px 14px;border-bottom:0.5px solid var(--bd);background:var(--bs);position:sticky;top:49px;z-index:2">
+          <div class="nav-item on">
+            <svg width="13" height="13" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="5" r="3" stroke="currentColor" stroke-width="1.3"/><path d="M2 14c0-3.3 2.7-6 6-6s6 2.7 6 6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+            Profile
+          </div>
+          <div class="nav-item">
+            <svg width="13" height="13" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="3" stroke="currentColor" stroke-width="1.3"/><path d="M8 1v2M8 13v2M1 8h2M13 8h2M3.1 3.1l1.4 1.4M11.5 11.5l1.4 1.4M3.1 12.9l1.4-1.4M11.5 4.5l1.4-1.4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+            Presence
+          </div>
+          <div class="nav-item">
+            <svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M13 10.5a1 1 0 0 1-1 1H4l-2 2V4a1 1 0 0 1 1-1h9a1 1 0 0 1 1 1v6.5Z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg>
+            Notifications
+          </div>
+        </div>
+
+        <!-- ✦ Scrollable body with custom scrollbar -->
+        <div class="modal-scroll" style="padding:20px;overflow-y:auto;max-height:340px">
+
+          <p class="sec">Profile</p>
+
+          <div style="display:flex;align-items:flex-end;gap:14px;margin-bottom:18px;padding:14px;background:var(--inp);border-radius:10px;border:0.5px solid var(--bd)">
+            <div style="position:relative;flex-shrink:0">
+              <div class="av" style="width:60px;height:60px;font-size:17px;background:#9FE1CB;color:#085041">HZ<div class="dot" style="width:12px;height:12px;background:var(--don);border-color:var(--inp)"></div></div>
+              <div style="position:absolute;inset:0;border-radius:50%;background:rgba(0,0,0,0.28);display:flex;align-items:center;justify-content:center;cursor:pointer">
+                <svg width="15" height="15" viewBox="0 0 18 18" fill="none"><path d="M9 3v9M5 7l4-4 4 4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 14h14" stroke="white" stroke-width="1.4" stroke-linecap="round"/></svg>
+              </div>
+            </div>
+            <div>
+              <p style="font-size:13px;font-weight:500;color:var(--tp);margin:0 0 2px">Hamza Zahid</p>
+              <p style="font-size:11px;color:var(--ts);margin:0 0 9px">hamza@example.com</p>
+              <div style="display:flex;gap:6px">
+                <div style="background:var(--uplb);border:0.5px solid var(--bd2);border-radius:6px;padding:4px 10px;font-size:11px;color:var(--dont);cursor:pointer">Upload photo</div>
+                <div style="background:var(--inp);border:0.5px solid var(--bd2);border-radius:6px;padding:4px 10px;font-size:11px;color:var(--ts);cursor:pointer">Remove</div>
+              </div>
+            </div>
+            <div style="flex:1"></div>
+            <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px">
+              <span style="font-size:10px;color:var(--ts)">Initials fallback</span>
+              <div style="display:flex;gap:5px">
+                <div class="av" style="width:24px;height:24px;font-size:8px;background:#CECBF6;color:#3C3489">AK</div>
+                <div class="av" style="width:24px;height:24px;font-size:8px;background:#C0DD97;color:#3B6D11">NR</div>
+                <div class="av" style="width:24px;height:24px;font-size:8px;background:#F5C4B3;color:#712B13">ZM</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="fld">
+            <label>Display name</label>
+            <div class="fld-inp on"><span>Hamza Zahid</span><svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M10 2l2 2-8 8H2v-2L10 2Z" stroke="var(--ta)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          </div>
+          <div class="fld">
+            <label>Email address</label>
+            <div class="fld-inp"><span>hamza@example.com</span></div>
+          </div>
+
+          <div style="height:0.5px;background:var(--bd);margin:6px 0 18px"></div>
+
+          <p class="sec">Presence</p>
+
+          <div class="prs-pill" style="background:var(--donb);border-color:var(--don)">
+            <div style="width:10px;height:10px;border-radius:50%;background:var(--don);flex-shrink:0"></div>
+            <span style="color:var(--dont);flex:1;font-size:12.5px">Online</span>
+            <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M2 7l3.5 3.5L12 3" stroke="var(--don)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div class="prs-pill" style="background:var(--inp);border-color:var(--bd2)">
+            <div style="width:10px;height:10px;border-radius:50%;background:var(--day);flex-shrink:0"></div>
+            <span style="color:var(--tp);flex:1;font-size:12.5px">Away</span>
+            <span style="font-size:10.5px;color:var(--ts)">auto after 5 min</span>
+          </div>
+          <div class="prs-pill" style="background:var(--inp);border-color:var(--bd2);margin-bottom:14px">
+            <div style="width:10px;height:10px;border-radius:50%;background:var(--dof);flex-shrink:0"></div>
+            <span style="color:var(--tp);flex:1;font-size:12.5px">Appear offline</span>
+            <span style="font-size:10.5px;color:var(--ts)">on disconnect</span>
+          </div>
+
+          <div style="background:var(--inp);border:0.5px solid var(--bd);border-radius:9px;padding:10px 12px;margin-bottom:8px">
+            <div style="display:flex;align-items:center;gap:7px;margin-bottom:7px">
+              <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6.5" stroke="var(--ts)" stroke-width="1.2"/><path d="M8 5v3.5l2 2" stroke="var(--ts)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <span style="font-size:11px;font-weight:500;color:var(--tp)">Auto-Away timer</span>
+            </div>
+            <div style="display:flex;gap:2px;margin-bottom:5px">
+              <div class="seg on"></div><div class="seg on"></div><div class="seg on"></div><div class="seg"></div><div class="seg"></div>
+            </div>
+            <p style="font-size:10.5px;color:var(--ts);margin:0">3 of 5 minutes idle — switching to Away in 2 min</p>
+          </div>
+
+          <div style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--donb);border-radius:8px;border:0.5px solid var(--don);margin-bottom:20px">
+            <div style="width:6px;height:6px;border-radius:50%;background:var(--don);flex-shrink:0"></div>
+            <span style="font-size:10.5px;color:var(--dont)">SignalR hub connected — broadcasting to 4 clients</span>
+          </div>
+
+          <div style="display:flex;justify-content:flex-end">
+            <button class="sbtn">Save changes <svg width="11" height="11" viewBox="0 0 14 14" fill="none"><path d="M2 7l3.5 3.5L12 3" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

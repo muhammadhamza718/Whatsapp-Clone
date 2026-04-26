@@ -129,3 +129,4 @@ F:\Courses\Hamza\WhatsApp Clone\backend\obj\Debug\net10.0\refint\ChatApp.Api.dll
 F:\Courses\Hamza\WhatsApp Clone\backend\obj\Debug\net10.0\ChatApp.Api.pdb
 F:\Courses\Hamza\WhatsApp Clone\backend\obj\Debug\net10.0\ChatApp.Api.genruntimeconfig.cache
 F:\Courses\Hamza\WhatsApp Clone\backend\obj\Debug\net10.0\ref\ChatApp.Api.dll
+F:\Courses\Hamza\WhatsApp Clone\backend\bin\Debug\net10.0\EFCore.NamingConventions.dll

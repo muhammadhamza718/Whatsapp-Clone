@@ -1,9 +1,10 @@
 "use client";
 
-import { CldUploadWidget } from "next-cloudinary";
-import { Camera, Trash2 } from "lucide-react";
+import { useRef, useState } from "react";
+import { Camera, Trash2, Loader2 } from "lucide-react";
 import { Avatar } from "@/components/ui/Avatar";
 import { cn } from "@/lib/utils";
+import ky from "ky";
 
 interface AvatarUploadProps {
   value?: string | null;
@@ -18,44 +19,70 @@ export function AvatarUpload({
   onChange,
   className,
 }: AvatarUploadProps) {
+  const [isUploading, setIsUploading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setIsUploading(true);
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("upload_preset", "whatsapp_clone");
+
+      const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
+      const response = await ky.post(
+        `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,
+        { body: formData }
+      ).json<{ secure_url: string }>();
+
+      onChange(response.secure_url);
+    } catch (error) {
+      console.error("Upload failed:", error);
+      alert("Failed to upload image. Please try again.");
+    } finally {
+      setIsUploading(false);
+      if (fileInputRef.current) fileInputRef.current.value = "";
+    }
+  };
+
   return (
     <div className={cn("flex flex-col items-center gap-4", className)}>
+      <input
+        type="file"
+        ref={fileInputRef}
+        onChange={handleUpload}
+        accept="image/*"
+        className="hidden"
+      />
+      
       <div className="relative group">
         <Avatar
           src={value}
           name={name}
           size="xl"
+          isLoading={isUploading}
           className="w-24 h-24 ring-4 ring-zinc-100 dark:ring-zinc-800 transition-all group-hover:opacity-90"
         />
         
-        <CldUploadWidget
-          uploadPreset="whatsapp_clone" // Make sure to create this in Cloudinary settings
-          onSuccess={(result: any) => {
-            if (result.info && typeof result.info !== "string") {
-              onChange(result.info.secure_url);
-            }
-          }}
-          options={{
-            maxFiles: 1,
-            resourceType: "image",
-            clientAllowedFormats: ["jpg", "png", "webp"],
-            maxFileSize: 2000000, // 2MB
-          }}
+        <button
+          onClick={() => fileInputRef.current?.click()}
+          disabled={isUploading}
+          type="button"
+          className="absolute bottom-0 right-0 p-2 bg-[#1D9E75] text-white rounded-full shadow-lg hover:bg-[#168663] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          title="Change Photo"
         >
-          {({ open }) => (
-            <button
-              onClick={() => open()}
-              type="button"
-              className="absolute bottom-0 right-0 p-2 bg-[#1D9E75] text-white rounded-full shadow-lg hover:bg-[#168663] transition-colors"
-              title="Change Photo"
-            >
-              <Camera className="w-4 h-4" />
-            </button>
+          {isUploading ? (
+            <Loader2 className="w-4 h-4 animate-spin" />
+          ) : (
+            <Camera className="w-4 h-4" />
           )}
-        </CldUploadWidget>
+        </button>
       </div>
 
-      {value && (
+      {value && !isUploading && (
         <button
           onClick={() => onChange(null)}
           type="button"

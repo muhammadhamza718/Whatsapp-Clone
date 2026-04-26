@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using ChatApp.Api.Data;
 using Npgsql;
+using ChatApp.Api.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -39,10 +40,12 @@ else
 
 // Add services to the container.
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseNpgsql(connectionString));
+    options.UseNpgsql(connectionString)
+           .UseLowerCaseNamingConvention());
 
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
+builder.Services.AddSignalR();
 
 // 2. Add CORS Policy
 builder.Services.AddCors(options =>
@@ -69,7 +72,8 @@ app.UseCors("AllowVercel");
 app.UseAuthorization();
 
 app.MapControllers();
+app.MapHub<PresenceHub>("/hubs/presence");
 
 // 3. Dynamic Port Selection
-var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
-app.Run($"http://0.0.0.0:{port}");
+var port = Environment.GetEnvironmentVariable("PORT") ?? "5100";
+app.Run($"http://*:{port}");

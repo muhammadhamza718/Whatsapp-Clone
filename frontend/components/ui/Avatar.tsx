@@ -9,8 +9,15 @@ interface AvatarProps {
   size?: "sm" | "md" | "lg" | "xl";
   className?: string;
   showDot?: boolean;
-  dotColor?: string;
+  status?: "online" | "away" | "offline";
+  isLoading?: boolean;
 }
+
+const statusColors = {
+  online: "bg-[#1D9E75]",
+  away: "bg-[#EF9F27]",
+  offline: "bg-[#B4B2A9]",
+};
 
 const sizes = {
   sm: "w-6 h-6 text-[8px]",
@@ -32,7 +39,8 @@ export function Avatar({
   size = "md",
   className,
   showDot = false,
-  dotColor = "bg-[#1D9E75]", // Online green
+  status = "offline",
+  isLoading = false,
 }: AvatarProps) {
   const initials = getInitials(name || "");
   const colors = getAvatarColor(name || "");
@@ -41,12 +49,17 @@ export function Avatar({
     <div className={cn("relative flex-shrink-0", className)}>
       <div
         className={cn(
-          "av rounded-full flex items-center justify-center font-medium overflow-hidden",
-          sizes[size]
+          "av rounded-full flex items-center justify-center font-medium overflow-hidden transition-all",
+          sizes[size],
+          isLoading && "opacity-50 grayscale-[0.5]"
         )}
         style={!src ? { backgroundColor: colors.bg, color: colors.text } : {}}
       >
-        {src ? (
+        {isLoading ? (
+          <div className="absolute inset-0 flex items-center justify-center bg-black/20">
+            <div className="w-1/2 h-1/2 border-2 border-white/50 border-t-white rounded-full animate-spin" />
+          </div>
+        ) : src ? (
           <CldImage
             src={src}
             alt={name || "User avatar"}
@@ -64,9 +77,9 @@ export function Avatar({
       {showDot && (
         <div
           className={cn(
-            "dot absolute bottom-0 right-0 rounded-full border-white dark:border-[#13151A]",
+            "dot absolute bottom-0 right-0 rounded-full border-white dark:border-[#13151A] transition-colors",
             dotSizes[size],
-            dotColor
+            statusColors[status]
           )}
         />
       )}
