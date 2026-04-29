@@ -13,10 +13,12 @@ export const auth = betterAuth({
       status: {
         type: "string",
         defaultValue: "offline",
+        fieldName: "status",
       },
       lastSeenAt: {
         type: "date",
         defaultValue: new Date(),
+        fieldName: "lastseenat",
       },
     },
   },

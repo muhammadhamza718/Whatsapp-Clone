@@ -1,7 +1,10 @@
 using Microsoft.EntityFrameworkCore;
 using ChatApp.Api.Data;
+using ChatApp.Api.Repositories;
+using ChatApp.Api.Services;
 using Npgsql;
 using ChatApp.Api.Hubs;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -43,9 +46,19 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(connectionString)
            .UseLowerCaseNamingConvention());
 
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+});
 builder.Services.AddOpenApi();
-builder.Services.AddSignalR();
+builder.Services.AddSignalR(options =>
+{
+    Microsoft.AspNetCore.SignalR.HubOptionsExtensions.AddFilter<GroupAuthorizationFilter>(options);
+})
+.AddStackExchangeRedis(builder.Configuration.GetConnectionString("RedisConnection") ?? "localhost:6379");
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<IConversationRepository, ConversationRepository>();
+builder.Services.AddScoped<IConversationService, ConversationService>();
 
 // 2. Add CORS Policy
 builder.Services.AddCors(options =>
@@ -73,6 +86,7 @@ app.UseAuthorization();
 
 app.MapControllers();
 app.MapHub<PresenceHub>("/hubs/presence");
+app.MapHub<ChatHub>("/hubs/chat");
 
 // 3. Dynamic Port Selection
 var port = Environment.GetEnvironmentVariable("PORT") ?? "5100";

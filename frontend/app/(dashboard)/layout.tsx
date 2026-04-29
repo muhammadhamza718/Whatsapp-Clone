@@ -8,6 +8,7 @@ import { ChatSidebar } from "./components/ChatSidebar";
 import { MessageSquare, Users, Settings, LogOut } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { PresenceProvider, usePresence } from "@/lib/presence/PresenceProvider";
+import { RoadmapLock } from "@/components/ui/RoadmapLock";
 
 export default function DashboardLayout({
   children,
@@ -38,8 +39,14 @@ function DashboardContent({ children }: { children: React.ReactNode }) {
         {/* Top Icons */}
         <div className="flex flex-col gap-4 flex-1">
           <SidebarIcon icon={<MessageSquare className="w-5 h-5" />} active />
-          <SidebarIcon icon={<Users className="w-5 h-5" />} />
-          <SidebarIcon icon={<Settings className="w-5 h-5" />} />
+          
+          <RoadmapLock phase={3} label="Global Users">
+            <SidebarIcon icon={<Users className="w-5 h-5" />} />
+          </RoadmapLock>
+
+          <RoadmapLock phase={5} label="System Settings">
+            <SidebarIcon icon={<Settings className="w-5 h-5" />} />
+          </RoadmapLock>
         </div>
 
         {/* Bottom Actions */}

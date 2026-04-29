@@ -36,10 +36,14 @@ namespace ChatApp.Api.Migrations
                         .HasColumnType("text")
                         .HasColumnName("content");
 
-                    b.Property<string>("Sender")
+                    b.Property<Guid>("ConversationId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("conversationid");
+
+                    b.Property<string>("SenderId")
                         .IsRequired()
                         .HasColumnType("text")
-                        .HasColumnName("sender");
+                        .HasColumnName("senderid");
 
                     b.Property<DateTime>("Timestamp")
                         .HasColumnType("timestamp with time zone")
@@ -48,10 +52,98 @@ namespace ChatApp.Api.Migrations
                     b.HasKey("Id")
                         .HasName("pk_messages");
 
+                    b.HasIndex("ConversationId")
+                        .HasDatabaseName("ix_messages_conversationid");
+
+                    b.HasIndex("SenderId")
+                        .HasDatabaseName("ix_messages_senderid");
+
                     b.HasIndex("Timestamp")
                         .HasDatabaseName("ix_messages_timestamp");
 
                     b.ToTable("messages", (string)null);
+                });
+
+            modelBuilder.Entity("ChatApp.Api.Models.Conversation", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("createdat");
+
+                    b.Property<string>("CreatedById")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("createdbyid");
+
+                    b.Property<string>("Image")
+                        .HasColumnType("text")
+                        .HasColumnName("image");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("text")
+                        .HasColumnName("name");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("integer")
+                        .HasColumnName("type");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("updatedat");
+
+                    b.HasKey("Id")
+                        .HasName("pk_conversations");
+
+                    b.HasIndex("UpdatedAt")
+                        .HasDatabaseName("ix_conversations_updatedat");
+
+                    b.ToTable("conversations", (string)null);
+                });
+
+            modelBuilder.Entity("ChatApp.Api.Models.ConversationMember", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<Guid>("ConversationId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("conversationid");
+
+                    b.Property<DateTime>("JoinedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("joinedat");
+
+                    b.Property<DateTime>("LastReadAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("lastreadat");
+
+                    b.Property<int>("Role")
+                        .HasColumnType("integer")
+                        .HasColumnName("role");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("userid");
+
+                    b.HasKey("Id")
+                        .HasName("pk_conversationmembers");
+
+                    b.HasIndex("UserId")
+                        .HasDatabaseName("ix_conversationmembers_userid");
+
+                    b.HasIndex("ConversationId", "UserId")
+                        .IsUnique()
+                        .HasDatabaseName("ix_conversationmembers_conversationid_userid");
+
+                    b.ToTable("conversationmembers", (string)null);
                 });
 
             modelBuilder.Entity("ChatApp.Api.Models.User", b =>
@@ -85,6 +177,55 @@ namespace ChatApp.Api.Migrations
                         .HasName("pk_user");
 
                     b.ToTable("user", (string)null);
+                });
+
+            modelBuilder.Entity("ChatApp.Api.Models.ChatMessage", b =>
+                {
+                    b.HasOne("ChatApp.Api.Models.Conversation", "Conversation")
+                        .WithMany("Messages")
+                        .HasForeignKey("ConversationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_messages_conversations_conversationid");
+
+                    b.HasOne("ChatApp.Api.Models.User", "Sender")
+                        .WithMany()
+                        .HasForeignKey("SenderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_messages_user_senderid");
+
+                    b.Navigation("Conversation");
+
+                    b.Navigation("Sender");
+                });
+
+            modelBuilder.Entity("ChatApp.Api.Models.ConversationMember", b =>
+                {
+                    b.HasOne("ChatApp.Api.Models.Conversation", "Conversation")
+                        .WithMany("Members")
+                        .HasForeignKey("ConversationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_conversationmembers_conversations_conversationid");
+
+                    b.HasOne("ChatApp.Api.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_conversationmembers_user_userid");
+
+                    b.Navigation("Conversation");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("ChatApp.Api.Models.Conversation", b =>
+                {
+                    b.Navigation("Members");
+
+                    b.Navigation("Messages");
                 });
 #pragma warning restore 612, 618
         }
