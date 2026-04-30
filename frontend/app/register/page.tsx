@@ -53,13 +53,13 @@ export default function RegisterPage() {
     }
 
     // Success! Redirect to login or dashboard
-    router.push("/login");
+    router.push("/");
   };
 
   const handleSocialLogin = async (provider: "google" | "github") => {
     await authClient.signIn.social({
       provider,
-      callbackURL: "/dashboard",
+      callbackURL: "/",
     });
   };
 

@@ -2,6 +2,7 @@ import ky from "ky";
 
 export const api = ky.create({
   prefix: process.env.NEXT_PUBLIC_API_URL || "http://localhost:5100/api",
+  timeout: 30000,
   hooks: {
     beforeRequest: [
       (_request) => {

@@ -121,6 +121,38 @@ public class ConversationsController : ControllerBase
         }
     }
 
+    [HttpGet("{id}/messages")]
+    public async Task<IActionResult> GetConversationMessages(Guid id, [FromQuery] int skip = 0, [FromQuery] int take = 50)
+    {
+        var userId = Request.Headers["X-User-Id"].ToString();
+        if (string.IsNullOrEmpty(userId))
+        {
+            return Unauthorized("X-User-Id header is required.");
+        }
+
+        try
+        {
+            var isMember = await _context.ConversationMembers
+                .AnyAsync(m => m.ConversationId == id && m.UserId == userId);
+            
+            if (!isMember)
+                return Forbid("You are not a member of this conversation.");
+
+            var messages = await _context.Messages
+                .Where(m => m.ConversationId == id)
+                .OrderBy(m => m.Timestamp)
+                .Skip(skip)
+                .Take(take)
+                .ToListAsync();
+
+            return Ok(messages);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Internal server error: {ex.Message}");
+        }
+    }
+
     [HttpPost("group")]
     public async Task<IActionResult> CreateGroup([FromBody] CreateGroupRequest request)
     {

@@ -114,6 +114,7 @@ public class ConversationService : IConversationService
             .OrderByDescending(c => c.UpdatedAt)
             .Skip(skip)
             .Take(take)
+            .AsSplitQuery()
             .ToListAsync();
 
         var result = new List<ConversationDto>();

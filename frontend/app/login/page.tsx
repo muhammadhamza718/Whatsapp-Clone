@@ -50,13 +50,13 @@ export default function LoginPage() {
       return;
     }
 
-    router.push("/dashboard"); // Redirect to home/dashboard on success
+    router.push("/"); // Redirect to home/dashboard on success
   };
 
   const handleSocialLogin = async (provider: "google" | "github") => {
     await authClient.signIn.social({
       provider,
-      callbackURL: "/dashboard",
+      callbackURL: "/",
     });
   };
 

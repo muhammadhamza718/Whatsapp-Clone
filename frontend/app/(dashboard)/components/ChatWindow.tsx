@@ -3,7 +3,7 @@
 import { useEffect, useState, useRef } from "react";
 import { authClient } from "@/lib/auth-client";
 import { api } from "@/lib/ky";
-import { HubConnection, HubConnectionBuilder, LogLevel } from "@microsoft/signalr";
+import { HubConnection, HubConnectionBuilder, LogLevel, HubConnectionState } from "@microsoft/signalr";
 import { Send, Loader2, Info, MoreVertical, Phone, Video, Plus } from "lucide-react";
 import { Avatar } from "@/components/ui/Avatar";
 import { cn, formatTime } from "@/lib/utils";
@@ -85,8 +85,10 @@ export function ChatWindow({ id }: ChatWindowProps) {
 
     return () => {
       if (newConnection) {
-        newConnection.invoke("LeaveConversation", id);
-        newConnection.stop();
+        if (newConnection.state === HubConnectionState.Connected) {
+          newConnection.invoke("LeaveConversation", id).catch(console.error);
+        }
+        newConnection.stop().catch(console.error);
       }
     };
   }, [id, session?.user?.id]);
