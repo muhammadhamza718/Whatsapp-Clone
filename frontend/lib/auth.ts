@@ -19,6 +19,11 @@ export const auth = betterAuth({
     enabled: false,
   },
   user: {
+    fields: {
+      emailVerified: "email_verified",
+      createdAt: "created_at",
+      updatedAt: "updated_at",
+    },
     additionalFields: {
       status: {
         type: "string",
@@ -30,6 +35,42 @@ export const auth = betterAuth({
         defaultValue: new Date(),
         fieldName: "lastseenat",
       },
+    },
+  },
+  session: {
+    fields: {
+      expiresAt: "expires_at",
+      token: "token",
+      createdAt: "created_at",
+      updatedAt: "updated_at",
+      ipAddress: "ip_address",
+      userAgent: "user_agent",
+      userId: "user_id",
+    },
+  },
+  account: {
+    fields: {
+      accountId: "account_id",
+      providerId: "provider_id",
+      userId: "user_id",
+      accessToken: "access_token",
+      refreshToken: "refresh_token",
+      idToken: "id_token",
+      accessTokenExpiresAt: "access_token_expires_at",
+      refreshTokenExpiresAt: "refresh_token_expires_at",
+      scope: "scope",
+      password: "password",
+      createdAt: "created_at",
+      updatedAt: "updated_at",
+    },
+  },
+  verification: {
+    fields: {
+      identifier: "identifier",
+      value: "value",
+      expiresAt: "expires_at",
+      createdAt: "created_at",
+      updatedAt: "updated_at",
     },
   },
   emailAndPassword: {
