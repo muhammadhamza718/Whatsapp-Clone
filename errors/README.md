@@ -12,3 +12,4 @@
 | [BUG-001](networking/BUG-001-signalr-failed-to-fetch.md) | SignalR "Failed to fetch" on localhost | networking | 🟢 `resolved` | 2026-04-26 |
 | [BUG-002](frontend/BUG-002-signalr-cannot-send-data-not-connected.md) | SignalR Cannot Send Data - Not in Connected State | frontend | 🟢 `resolved` | 2026-04-26 |
 | [BUG-003](database/BUG-003-ef-core-better-auth-case-mismatch.md) | EF Core & Better Auth PostgreSQL Case Mismatch | database | 🟢 `resolved` | 2026-04-26 |
+| [BUG-004](auth/BUG-004-google-oauth-vercel-better-auth-url.md) | Google OAuth Fails on Vercel (BETTER_AUTH_URL = localhost) | auth | 🟡 `fix-attempted` | 2026-05-01 |
