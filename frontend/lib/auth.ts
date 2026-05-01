@@ -15,6 +15,9 @@ export const auth = betterAuth({
     "https://whatsapp-clone-relay.vercel.app",
     "http://localhost:3000"
   ],
+  rateLimit: {
+    enabled: false,
+  },
   user: {
     additionalFields: {
       status: {
