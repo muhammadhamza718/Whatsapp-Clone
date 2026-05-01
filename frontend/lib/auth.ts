@@ -4,12 +4,17 @@ import { Pool } from "pg";
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
   ssl: process.env.NODE_ENV === "production"
-    ? { rejectUnauthorized: false, sslmode: "verify-full" } as Record<string, unknown>
+    ? { rejectUnauthorized: false }
     : false,
 });
 
 export const auth = betterAuth({
   database: pool,
+  baseURL: process.env.BETTER_AUTH_URL || process.env.NEXT_PUBLIC_APP_URL,
+  trustedOrigins: [
+    "https://whatsapp-clone-relay.vercel.app",
+    "http://localhost:3000"
+  ],
   user: {
     additionalFields: {
       status: {

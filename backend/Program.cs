@@ -51,11 +51,23 @@ builder.Services.AddControllers().AddJsonOptions(options =>
     options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
 });
 builder.Services.AddOpenApi();
-builder.Services.AddSignalR(options =>
+var redisConnectionString = builder.Configuration.GetConnectionString("RedisConnection");
+
+if (!string.IsNullOrEmpty(redisConnectionString))
 {
-    Microsoft.AspNetCore.SignalR.HubOptionsExtensions.AddFilter<GroupAuthorizationFilter>(options);
-})
-.AddStackExchangeRedis(builder.Configuration.GetConnectionString("RedisConnection") ?? "localhost:6379");
+    builder.Services.AddSignalR(options =>
+    {
+        Microsoft.AspNetCore.SignalR.HubOptionsExtensions.AddFilter<GroupAuthorizationFilter>(options);
+    })
+    .AddStackExchangeRedis(redisConnectionString);
+}
+else
+{
+    builder.Services.AddSignalR(options =>
+    {
+        Microsoft.AspNetCore.SignalR.HubOptionsExtensions.AddFilter<GroupAuthorizationFilter>(options);
+    });
+}
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IConversationRepository, ConversationRepository>();
 builder.Services.AddScoped<IConversationService, ConversationService>();

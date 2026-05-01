@@ -8,9 +8,9 @@
 |-------|-------|
 | **ID** | BUG-004 |
 | **Category** | auth |
-| **Status** | fix-attempted |
+| **Status** | resolved |
 | **Reported** | 2026-05-01 |
-| **Resolved** | — |
+| **Resolved** | 2026-05-02 |
 | **Severity** | 🔴 Critical (social auth completely broken in production) |
 
 ---
@@ -78,7 +78,11 @@ are treated as aliases for 'verify-full'...
 
 ## Resolution
 
-_Not yet confirmed by user._
+The issue was resolved by a multi-step process:
+1. **Environment Config:** Set `BETTER_AUTH_URL` and `NEXT_PUBLIC_APP_URL` on Vercel to match the production domain.
+2. **Google Cloud Console:** Moved the app to "Production" status and registered the correct Redirect URIs.
+3. **Database Schema:** (CRITICAL) Manually added the missing tables (`account`, `session`, `verification`) and columns (`emailVerified`, `createdAt`, `updatedAt`) to the Neon PostgreSQL database, which were missing from the initial backend migrations.
+4. **Code Hardening:** Updated `auth.ts` to include `trustedOrigins` and robust `baseURL` detection.
 
 ---
 
