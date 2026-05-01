@@ -92,6 +92,13 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
+// Elite Logging Middleware
+app.Use(async (context, next) =>
+{
+    Console.WriteLine($"[Backend Request] {context.Request.Method} {context.Request.Path}");
+    await next();
+});
+
 app.UseCors("AllowVercel");
 
 app.UseAuthorization();

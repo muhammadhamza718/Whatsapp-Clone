@@ -54,6 +54,7 @@ export default function LoginPage() {
   };
 
   const handleSocialLogin = async (provider: "google" | "github") => {
+    console.log(`[Frontend] handleSocialLogin triggered for provider: ${provider}`);
     await authClient.signIn.social({
       provider,
       callbackURL: "/",

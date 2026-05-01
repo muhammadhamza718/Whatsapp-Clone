@@ -10,6 +10,12 @@ const pool = new Pool({
 
 export const auth = betterAuth({
   database: pool,
+  logger: {
+    level: "debug",
+    handler: (level: "debug" | "info" | "warn" | "error", message: string, ...args: any[]) => {
+      console.log(`[Better Auth ${level.toUpperCase()}] ${message}`, ...args);
+    },
+  },
   baseURL: process.env.BETTER_AUTH_URL || process.env.NEXT_PUBLIC_APP_URL,
   trustedOrigins: [
     "https://whatsapp-clone-relay.vercel.app",
