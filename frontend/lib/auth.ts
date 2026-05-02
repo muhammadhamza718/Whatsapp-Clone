@@ -13,7 +13,8 @@ export const auth = betterAuth({
   logger: {
     level: "debug",
     handler: (level: "debug" | "info" | "warn" | "error", message: string, ...args: any[]) => {
-      console.log(`[Better Auth ${level.toUpperCase()}] ${message}`, ...args);
+      // Force everything to error level so it shows up in Vercel logs clearly
+      console.error(`[Better Auth DEBUG-FORCE] ${level.toUpperCase()}: ${message}`, ...args);
     },
   },
   baseURL: process.env.BETTER_AUTH_URL || process.env.NEXT_PUBLIC_APP_URL,
