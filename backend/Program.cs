@@ -51,7 +51,8 @@ builder.Services.AddControllers().AddJsonOptions(options =>
     options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
 });
 builder.Services.AddOpenApi();
-var redisConnectionString = builder.Configuration.GetConnectionString("RedisConnection");
+var redisConnectionString = Environment.GetEnvironmentVariable("REDIS_URL");
+
 
 if (!string.IsNullOrEmpty(redisConnectionString))
 {
