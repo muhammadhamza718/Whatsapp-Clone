@@ -77,4 +77,24 @@ public class ChatHub : Hub
             }
         }
     }
+
+    [HubMethodName("SendTypingStatus")]
+    public async Task SendTypingStatus(Guid conversationId, string userId, bool isTyping)
+    {
+        // Broadcast to all members' sidebars AND active windows via PresenceHub
+        var conversation = await _context.Conversations
+            .Include(c => c.Members)
+            .FirstOrDefaultAsync(c => c.Id == conversationId);
+
+        if (conversation != null)
+        {
+            foreach (var member in conversation.Members)
+            {
+                // Skip the sender themselves
+                if (member.UserId == userId) continue;
+                
+                await _presenceHubContext.Clients.Group(member.UserId).SendAsync("UserTyping", conversationId, userId, isTyping);
+            }
+        }
+    }
 }

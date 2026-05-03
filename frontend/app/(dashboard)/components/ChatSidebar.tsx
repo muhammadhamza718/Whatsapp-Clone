@@ -33,6 +33,7 @@ export function ChatSidebar() {
   const [isLoading, setIsLoading] = useState(true);
   const [isNewDMOpen, setIsNewDMOpen] = useState(false);
   const [isNewGroupOpen, setIsNewGroupOpen] = useState(false);
+  const [typingUsers, setTypingUsers] = useState<Record<string, Set<string>>>({});
 
   const fetchConversations = async () => {
     if (!session?.user?.id) return;
@@ -77,15 +78,18 @@ export function ChatSidebar() {
     const handleMessageReceived = (message: any) => {
       setConversations((prev) => {
         const index = prev.findIndex((c) => c.id === message.conversationId);
-        if (index === -1) return prev; // Should be handled by ConversationCreated
+        if (index === -1) return prev;
 
         const updated = [...prev];
         const conv = { ...updated[index] };
         conv.latestMessage = message.content;
         conv.latestMessageTimestamp = message.timestamp;
+        
         // Increment unread if not currently in this conversation
-        // This is a bit complex as we don't know the active conversation here easily without extra state
-        // But for now, we'll just update the text and sort
+        if (params.id !== conv.id) {
+          conv.unreadCount = (conv.unreadCount || 0) + 1;
+        }
+
         updated.splice(index, 1);
         return [conv, ...updated];
       });
@@ -93,10 +97,32 @@ export function ChatSidebar() {
 
     connection.on("MessageReceived", handleMessageReceived);
 
+    const handleUserTyping = (conversationId: string, userId: string, isTyping: boolean) => {
+      setTypingUsers((prev) => {
+        const next = { ...prev };
+        const users = new Set(next[conversationId] || []);
+        if (isTyping) {
+          users.add(userId);
+        } else {
+          users.delete(userId);
+        }
+        
+        if (users.size > 0) {
+          next[conversationId] = users;
+        } else {
+          delete next[conversationId];
+        }
+        return next;
+      });
+    };
+
+    connection.on("UserTyping", handleUserTyping);
+
     return () => {
       connection.off("UserStatusChanged");
       connection.off("ConversationCreated");
       connection.off("MessageReceived");
+      connection.off("UserTyping");
     };
   }, [connection, session?.user?.id]);
 
@@ -171,6 +197,7 @@ export function ChatSidebar() {
                 key={conv.id} 
                 conversation={conv} 
                 isActive={params.id === conv.id}
+                isTyping={!!typingUsers[conv.id]?.size}
               />
             ))
           )}
@@ -195,7 +222,15 @@ export function ChatSidebar() {
   );
 }
 
-function ConversationCard({ conversation, isActive }: { conversation: Conversation; isActive: boolean }) {
+function ConversationCard({ 
+  conversation, 
+  isActive, 
+  isTyping 
+}: { 
+  conversation: Conversation; 
+  isActive: boolean;
+  isTyping?: boolean;
+}) {
   return (
     <Link href={`/conversations/${conversation.id}`} className="block">
       <div className={cn(
@@ -222,7 +257,8 @@ function ConversationCard({ conversation, isActive }: { conversation: Conversati
           status={conversation.targetUserStatus as any}
           className={cn(
             "rounded-2xl ring-2 transition-all",
-            isActive ? "ring-emerald-500/30" : "ring-transparent group-hover:ring-white/10"
+            isActive ? "ring-emerald-500/30" : "ring-transparent group-hover:ring-white/10",
+            isTyping && "ring-emerald-500/50 animate-pulse"
           )}
         />
 
@@ -239,13 +275,19 @@ function ConversationCard({ conversation, isActive }: { conversation: Conversati
             </span>
           </div>
           <div className="flex items-center justify-between gap-2">
-            <p className={cn(
-              "text-[12.5px] truncate transition-colors",
-              isActive ? "text-white/60" : "text-white/30"
-            )}>
-              {conversation.latestMessage || "No messages yet"}
-            </p>
-            {conversation.unreadCount > 0 && (
+            {isTyping ? (
+              <p className="text-[12.5px] font-medium text-emerald-400 animate-pulse">
+                typing...
+              </p>
+            ) : (
+              <p className={cn(
+                "text-[12.5px] truncate transition-colors",
+                isActive ? "text-white/60" : "text-white/30"
+              )}>
+                {conversation.latestMessage || "No messages yet"}
+              </p>
+            )}
+            {conversation.unreadCount > 0 && !isTyping && (
               <span className="flex h-5 min-w-[20px] items-center justify-center rounded-full bg-emerald-500 px-1.5 text-[10px] font-bold text-black shadow-lg shadow-emerald-500/20">
                 {conversation.unreadCount}
               </span>

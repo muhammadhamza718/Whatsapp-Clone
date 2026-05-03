@@ -9,6 +9,8 @@ import { Avatar } from "@/components/ui/Avatar";
 import { cn, formatTime } from "@/lib/utils";
 import { motion, AnimatePresence } from "framer-motion";
 import { GroupSettingsModal } from "@/components/modals/GroupSettingsModal";
+import { useIntersectionObserver } from "@/hooks/use-intersection-observer";
+import { usePresence } from "@/lib/presence/PresenceProvider";
 
 interface Message {
   id: string;
@@ -24,13 +26,25 @@ interface ChatWindowProps {
 
 export function ChatWindow({ id }: ChatWindowProps) {
   const { data: session } = authClient.useSession();
+  const { connection: presenceConnection } = usePresence();
   const [messages, setMessages] = useState<Message[]>([]);
   const [connection, setConnection] = useState<HubConnection | null>(null);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(true);
   const [conversation, setConversation] = useState<any>(null);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [typingUsers, setTypingUsers] = useState<string[]>([]);
+  const [hasMore, setHasMore] = useState(true);
+  const [isFetchingMore, setIsFetchingMore] = useState(false);
+  
   const scrollRef = useRef<HTMLDivElement>(null);
+  const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const isTypingRef = useRef(false);
+
+  const { entry, setNode } = useIntersectionObserver({
+    threshold: 0.1,
+    rootMargin: '50px',
+  });
 
   // 1. Fetch Conversation Data & Messages
   useEffect(() => {
@@ -57,7 +71,52 @@ export function ChatWindow({ id }: ChatWindowProps) {
     };
 
     initChat();
+    setHasMore(true);
   }, [id, session?.user?.id]);
+
+  // 1b. Fetch More Messages (Infinite Scroll)
+  useEffect(() => {
+    if (entry?.isIntersecting && hasMore && !isFetchingMore && messages.length >= 50) {
+      fetchMoreMessages();
+    }
+  }, [entry?.isIntersecting]);
+
+  const fetchMoreMessages = async () => {
+    if (!session?.user?.id || isFetchingMore || !hasMore) return;
+
+    setIsFetchingMore(true);
+    const scrollContainer = scrollRef.current;
+    const previousScrollHeight = scrollContainer?.scrollHeight || 0;
+
+    try {
+      const moreMsgs = await api.get(`conversations/${id}/messages`, {
+        searchParams: { 
+          skip: messages.length, 
+          take: 50 
+        },
+        headers: { "X-User-Id": session.user.id }
+      }).json<Message[]>();
+
+      if (moreMsgs.length < 50) {
+        setHasMore(false);
+      }
+
+      if (moreMsgs.length > 0) {
+        setMessages(prev => [...moreMsgs, ...prev]);
+        
+        // Maintain scroll position
+        requestAnimationFrame(() => {
+          if (scrollContainer) {
+            scrollContainer.scrollTop = scrollContainer.scrollHeight - previousScrollHeight;
+          }
+        });
+      }
+    } catch (err) {
+      console.error("Failed to fetch more messages:", err);
+    } finally {
+      setIsFetchingMore(false);
+    }
+  };
 
   // 2. Setup SignalR Connection
   useEffect(() => {
@@ -92,6 +151,31 @@ export function ChatWindow({ id }: ChatWindowProps) {
       }
     };
   }, [id, session?.user?.id]);
+
+  // 2b. Global Typing Listener (via PresenceHub)
+  useEffect(() => {
+    if (!presenceConnection || !id) return;
+
+    const handleUserTyping = (convId: string, userId: string, isTyping: boolean) => {
+      // Only care about typing in THIS conversation
+      if (convId !== id) return;
+
+      setTypingUsers(prev => {
+        if (isTyping) {
+          if (prev.includes(userId)) return prev;
+          return [...prev, userId];
+        } else {
+          return prev.filter(uid => uid !== userId);
+        }
+      });
+    };
+
+    presenceConnection.on("UserTyping", handleUserTyping);
+
+    return () => {
+      presenceConnection.off("UserTyping", handleUserTyping);
+    };
+  }, [presenceConnection, id]);
 
   // 3. Auto Scroll
   useEffect(() => {
@@ -136,7 +220,9 @@ export function ChatWindow({ id }: ChatWindowProps) {
           <div>
             <h3 className="text-[15px] font-bold text-white leading-tight">{conversation?.name}</h3>
             <p className="text-[11px] text-emerald-400 font-medium">
-              {conversation?.targetUserStatus === "online" ? "Active Now" : "End-to-End Encrypted"}
+              {typingUsers.length > 0 
+                ? "typing..." 
+                : conversation?.targetUserStatus === "online" ? "Active Now" : "End-to-End Encrypted"}
             </p>
           </div>
         </div>
@@ -156,6 +242,16 @@ export function ChatWindow({ id }: ChatWindowProps) {
         ref={scrollRef}
         className="flex-1 overflow-y-auto p-6 space-y-4 custom-scrollbar bg-[url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png')] bg-fixed opacity-90"
       >
+        <div ref={setNode} className="py-4 w-full flex flex-col items-center justify-center gap-2">
+          {isFetchingMore ? (
+            <>
+              <Loader2 className="w-5 h-5 animate-spin text-emerald-500" />
+              <p className="text-[10px] font-bold text-emerald-500/50 uppercase tracking-widest">Loading history...</p>
+            </>
+          ) : !hasMore && messages.length > 0 ? (
+            <p className="text-[10px] font-bold text-white/10 uppercase tracking-widest">Beginning of conversation</p>
+          ) : null}
+        </div>
         <div className="flex flex-col gap-2">
           {messages.map((msg, index) => {
             const isMe = msg.senderId === session?.user?.id;
@@ -177,10 +273,10 @@ export function ChatWindow({ id }: ChatWindowProps) {
                   </div>
                 )}
                 <div className={cn(
-                  "px-4 py-2.5 rounded-2xl text-[14px] shadow-sm relative group",
+                  "px-4 py-2.5 rounded-2xl text-[14px] shadow-sm relative group transition-all",
                   isMe 
-                    ? "bg-emerald-500 text-black rounded-br-none" 
-                    : "bg-relay-surf text-white rounded-bl-none border border-white/5"
+                    ? "bg-gradient-to-br from-emerald-400 to-emerald-600 text-black rounded-br-none shadow-lg shadow-emerald-500/20 font-medium" 
+                    : "bg-relay-surf/80 backdrop-blur-md text-white rounded-bl-none border border-white/5 shadow-sm"
                 )}>
                   <p className="leading-relaxed">{msg.content}</p>
                   <span className={cn(
@@ -204,7 +300,22 @@ export function ChatWindow({ id }: ChatWindowProps) {
           </button>
           <input 
             value={input}
-            onChange={(e) => setInput(e.target.value)}
+            onChange={(e) => {
+              setInput(e.target.value);
+              if (connection && session?.user?.id) {
+                if (!isTypingRef.current) {
+                  isTypingRef.current = true;
+                  connection.invoke("SendTypingStatus", id, session.user.id, true);
+                }
+                
+                if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current);
+                typingTimeoutRef.current = setTimeout(() => {
+                  connection.invoke("SendTypingStatus", id, session.user.id, false);
+                  isTypingRef.current = false;
+                  typingTimeoutRef.current = null;
+                }, 3000);
+              }
+            }}
             placeholder="Write a message..."
             className="flex-1 bg-transparent border-none outline-none text-white placeholder:text-white/20 py-2"
           />

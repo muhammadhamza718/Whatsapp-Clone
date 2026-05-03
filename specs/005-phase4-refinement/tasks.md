@@ -1,0 +1,5 @@
+- [ ] T001 Update `ChatHub.cs` to broadcast typing status to `PresenceHub` members
+- [ ] T002 Implement `UserTyping` listener in `ChatSidebar.tsx`
+- [ ] T003 Update `ConversationCard` UI to display "typing..." status
+- [ ] T004 Add loading spinner to history loading in `ChatWindow.tsx`
+- [ ] T005 Verify cross-tab typing behavior in Sidebar using `webapp-testing`

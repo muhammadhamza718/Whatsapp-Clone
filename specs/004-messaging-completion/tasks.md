@@ -1,0 +1,15 @@
+- [x] T001 Verify database schema by running `cd backend && dotnet ef database update`
+- [x] T002 Audit `backend/Program.cs` to ensure `ChatHub` is mapped and CORS allows credentials
+- [x] T003 [P] [US3] Implement `SendTypingStatus` in `backend/Hubs/ChatHub.cs`
+- [x] T004 [US3] Add typing indicator event listener in `frontend/app/(dashboard)/components/ChatWindow.tsx`
+- [x] T005 [P] [US3] Implement typing status sender with 2s debounce in `frontend/app/(dashboard)/components/ChatWindow.tsx`
+- [x] T006 [US4] Update `ChatSidebar.tsx` to handle `MessageReceived` event and move conversation to top
+- [x] T007 [P] [US6] Create `hooks/use-intersection-observer.ts` for generic scroll detection
+- [x] T008 [US6] Implement top-sentinel scroll detection in `frontend/app/(dashboard)/components/ChatWindow.tsx`
+- [x] T009 [US6] Connect pagination to `GET /api/conversations/{id}/messages` and implement scroll compensation
+- [x] T010 [P] [US7] Wire up `NewDMModal.tsx` to `POST /api/conversations/dm`
+- [x] T011 [P] [US8] Wire up `CreateGroupModal.tsx` to `POST /api/conversations/group`
+- [x] T012 [US8] Implement `GroupSettingsModal.tsx` to allow members to leave or admins to delete
+- [x] T013 [P] Beautify message bubbles with subtle gradients and "Elite" glassmorphism effects
+- [ ] T014 [P] Add "Message Sent" and "Message Received" subtle sound effects (Optional)
+- [x] T015 Run final verification with side-by-side browser windows

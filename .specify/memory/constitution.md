@@ -45,6 +45,11 @@
 [SECTION_3_CONTENT]
 <!-- Example: Code review requirements, testing gates, deployment approval process, etc. -->
 
+## Agent Behavioral Mandates
+
+### I. Strict Separation of Planning and Execution
+When the user requests to create a **Spec**, **Plan**, or **Task List**, I MUST stop exactly after creating those documents. I am strictly forbidden from proceeding to implementation (writing project code) without explicit user approval of the plan. This ensures the architect (User) maintains full control over the technical direction before any code is committed.
+
 ## Governance
 <!-- Example: Constitution supersedes all other practices; Amendments require documentation, approval, migration plan -->
 

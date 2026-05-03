@@ -140,11 +140,13 @@ public class ConversationsController : ControllerBase
 
             var messages = await _context.Messages
                 .Where(m => m.ConversationId == id)
-                .OrderBy(m => m.Timestamp)
+                .OrderByDescending(m => m.Timestamp)
                 .Skip(skip)
                 .Take(take)
                 .ToListAsync();
 
+            // Reverse to return them in chronological order for the frontend
+            messages.Reverse();
             return Ok(messages);
         }
         catch (Exception ex)
